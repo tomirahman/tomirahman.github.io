@@ -1,0 +1,42 @@
+.card-swap-container {
+  position: relative;
+  perspective: 900px;
+  overflow: visible;
+}
+
+.card-swap-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 16px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  overflow: hidden;
+
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Soft shadow for Antique White palette */
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+.card-swap-item:hover {
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+  .card-swap-container {
+    transform: scale(0.85);
+    transform-origin: center center;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-swap-container {
+    transform: scale(0.7);
+    transform-origin: center center;
+  }
+}

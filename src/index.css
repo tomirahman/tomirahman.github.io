@@ -1,0 +1,191 @@
+/* Fonts loaded via index.html with non-blocking preload */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ============================================
+       ANTIQUE WHITE COLOR PALETTE (LIGHT ONLY)
+       No dark mode - single consistent theme
+       ============================================ */
+    
+    /* Primary Background - Antique White #FAEAD1 = 34 70% 90% */
+    --background: 34 70% 90%;
+    --foreground: 0 0% 14%; /* Raisin Black #232323 */
+    
+    /* Primary Blue (for links/active) - #208ECB = 202 74% 46% */
+    --primary: 202 74% 46%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Slightly darker antique white for contrast */
+    --secondary: 34 40% 85%;
+    --secondary-foreground: 0 0% 14%;
+    
+    /* Card - White with warmth */
+    --card: 34 50% 96%;
+    --card-foreground: 0 0% 14%;
+    
+    /* Passive card tokens */
+    --card-passive: 34 50% 96%;
+    --card-passive-foreground: 0 0% 14%;
+    
+    --popover: 34 50% 96%;
+    --popover-foreground: 0 0% 14%;
+    
+    /* Muted - Davy Gray / Web Gray */
+    --muted: 34 20% 92%;
+    --muted-foreground: 0 0% 31%; /* #505156 */
+    
+    /* Accent - Light Sky Blue #84CFFC = 202 96% 75% */
+    --accent: 202 96% 75%;
+    --accent-foreground: 0 0% 14%;
+    
+    /* Accent Sky for shiny text */
+    --accent-sky: 202 96% 75%;
+    
+    /* Accent Salmon - #F08967 = 17 82% 67% (for emphasis) */
+    --accent-salmon: 17 82% 67%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border - Light Gray #D0D3D3 = 180 2% 82% */
+    --border: 180 2% 82%;
+    --input: 180 2% 82%;
+    --ring: 202 74% 46%;
+
+    --radius: 0.75rem;
+
+    /* Shadows - soft, low elevation */
+    --shadow-soft: 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+    --shadow-elevated: 0 16px 40px -12px rgba(0, 0, 0, 0.12);
+    
+    /* Typography */
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --sidebar-background: 34 70% 90%;
+    --sidebar-foreground: 0 0% 14%;
+    --sidebar-primary: 202 74% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 34 40% 85%;
+    --sidebar-accent-foreground: 0 0% 14%;
+    --sidebar-border: 180 2% 82%;
+    --sidebar-ring: 202 74% 46%;
+  }
+
+  /* No dark mode - removed entirely */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  /* Uppercase headings get better letter-spacing for readability */
+  .tracking-display {
+    letter-spacing: 0.05em;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Giant watermark text utility */
+.watermark-text {
+  letter-spacing: 0.02em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+/* Premium heading styles */
+.heading-premium {
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-xl;
+    background: hsl(var(--background) / 0.85);
+  }
+  
+  /* Card variants */
+  .card-visual {
+    @apply bg-transparent border-border/30;
+  }
+  
+  .card-standard {
+    @apply bg-card border-border;
+  }
+}
+
+@layer utilities {
+  /* Stagger delays */
+  .stagger-1 { animation-delay: 80ms; }
+  .stagger-2 { animation-delay: 160ms; }
+  .stagger-3 { animation-delay: 240ms; }
+  .stagger-4 { animation-delay: 320ms; }
+  .stagger-5 { animation-delay: 400ms; }
+  .stagger-6 { animation-delay: 480ms; }
+
+  @media (max-width: 767px) {
+    .stagger-1 { animation-delay: 60ms; }
+    .stagger-2 { animation-delay: 120ms; }
+    .stagger-3 { animation-delay: 180ms; }
+    .stagger-4 { animation-delay: 240ms; }
+    .stagger-5 { animation-delay: 300ms; }
+    .stagger-6 { animation-delay: 360ms; }
+  }
+
+  /* Card hover - scale 1.02 + soft shadow */
+  .card-interactive {
+    box-shadow: var(--shadow-soft);
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card-interactive:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-medium);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .card-interactive:active {
+      background: hsl(var(--primary) / 0.05);
+      transition: background 120ms ease-out;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
