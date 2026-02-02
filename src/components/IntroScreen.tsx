@@ -64,16 +64,16 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
 
     timelineRef.current = tl;
 
-    // Animate through greetings (1s each = 5s total, then 1s exit = 6s max)
+    // Animate through greetings (~0.6s each = 3s total, then 0.5s exit = ~4s max)
     greetings.forEach((_, index) => {
       tl.to({}, {
-        duration: 0.9, // Time to show each greeting
+        duration: 0.6, // Time to show each greeting (faster)
         onStart: () => setCurrentIndex(index),
       });
     });
 
     // Small pause before reveal
-    tl.to({}, { duration: 0.5 });
+    tl.to({}, { duration: 0.3 });
 
     return () => {
       tl.kill();
@@ -106,7 +106,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
     <motion.div
       ref={containerRef}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
-      style={{ backgroundColor: 'hsl(var(--background))' }}
+      style={{ backgroundColor: '#0a0a0a' }}
       onClick={!isRevealing ? handleSkip : undefined}
       initial={{ y: 0, opacity: 1 }}
       animate={{
@@ -133,7 +133,13 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               }}
               className="absolute text-center"
             >
-              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground">
+              <h1
+                className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
+                style={{
+                  color: '#ffffff',
+                  textShadow: '0 2px 20px rgba(0,0,0,0.5), 0 0 60px rgba(255,255,255,0.3)'
+                }}
+              >
                 {greetings[currentIndex]?.text}
               </h1>
             </motion.div>
