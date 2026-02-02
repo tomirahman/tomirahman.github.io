@@ -136,8 +136,8 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
               <h1
                 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
                 style={{
-                  color: '#ffffff',
-                  textShadow: '0 2px 20px rgba(0,0,0,0.5), 0 0 60px rgba(255,255,255,0.3)'
+                  color: '#208ECB',
+                  textShadow: '0 0 30px rgba(32,142,203,0.6), 0 0 60px rgba(32,142,203,0.4), 0 2px 10px rgba(0,0,0,0.8)'
                 }}
               >
                 {greetings[currentIndex]?.text}
