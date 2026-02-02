@@ -7,7 +7,7 @@ interface AudioControllerProps {
   autoPlay?: boolean;
 }
 
-const AUDIO_ELEMENT_ID = "lovable-bg-audio";
+const AUDIO_ELEMENT_ID = "portfolio-bg-audio";
 
 function getOrCreateGlobalAudio(): HTMLAudioElement {
   let el = document.getElementById(AUDIO_ELEMENT_ID) as HTMLAudioElement | null;

@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import gsap from "@/lib/gsap-config";
+import { ChevronDown } from "lucide-react";
 
 interface IntroScreenProps {
   onComplete: () => void;
@@ -15,27 +15,29 @@ const greetings = [
 ];
 
 /**
- * Full-screen intro with GSAP-powered welcome animation.
+ * Full-screen intro with curtain reveal animation.
  * 
  * Flow:
  * 1. Full viewport blank screen (theme-aware)
- * 2. Welcome text sequence (~1s each, GSAP timeline)
+ * 2. Welcome text sequence at bottom center
  * 3. Curtain opens (screen slides up) revealing content
  * 
  * Performance:
  * - Plays once per session (sessionStorage)
- * - Skippable via click
- * - Max duration: 6 seconds
+ * - Skippable via click/scroll
+ * - Respects prefers-reduced-motion
  */
 const IntroScreen = ({ onComplete }: IntroScreenProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTextPhase, setIsTextPhase] = useState(true);
   const [isRevealing, setIsRevealing] = useState(false);
   const [shouldSkip, setShouldSkip] = useState(false);
-  const textRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
+  // Power2.out equivalent easing
+  const easing: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
   // Power2.inOut for curtain
   const easingInOut: [number, number, number, number] = [0.45, 0, 0.55, 1];
 
@@ -43,6 +45,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("hasSeenIntro");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setPrefersReducedMotion(reducedMotion);
 
     if (hasSeenIntro || reducedMotion) {
       setShouldSkip(true);
@@ -50,136 +53,158 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
     }
   }, [onComplete]);
 
-  // GSAP Timeline for greeting sequence
+  // Show scroll button after first greeting appears
   useEffect(() => {
-    if (shouldSkip || !isTextPhase) return;
+    if (shouldSkip || hasScrolled) return;
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        sessionStorage.setItem("hasSeenIntro", "true");
-        setIsTextPhase(false);
-        setIsRevealing(true);
-      }
-    });
+    const timer = setTimeout(() => {
+      setShowScrollButton(true);
+    }, 800); // Show after first word starts fading in
 
-    timelineRef.current = tl;
+    return () => clearTimeout(timer);
+  }, [shouldSkip, hasScrolled]);
 
-    // Animate through greetings (~0.6s each = 3s total, then 0.5s exit = ~4s max)
-    greetings.forEach((_, index) => {
-      tl.to({}, {
-        duration: 0.6, // Time to show each greeting (faster)
-        onStart: () => setCurrentIndex(index),
-      });
-    });
+  // Listen for manual scroll to hide button
+  useEffect(() => {
+    if (shouldSkip || isRevealing) return;
 
-    // Small pause before reveal
-    tl.to({}, { duration: 0.3 });
-
-    return () => {
-      tl.kill();
+    const handleScroll = () => {
+      setHasScrolled(true);
+      setShowScrollButton(false);
     };
-  }, [shouldSkip, isTextPhase]);
+
+    window.addEventListener("scroll", handleScroll, { once: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [shouldSkip, isRevealing]);
 
   // Skip handler
   const handleSkip = useCallback(() => {
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-    }
     sessionStorage.setItem("hasSeenIntro", "true");
     setIsTextPhase(false);
     setIsRevealing(true);
+    setShowScrollButton(false);
   }, []);
+
+  // Auto scroll handler
+  const handleAutoScroll = useCallback(() => {
+    setShowScrollButton(false);
+    handleSkip();
+  }, [handleSkip]);
+
+  // Progress through greetings (0.45-0.55s per greeting)
+  useEffect(() => {
+    if (shouldSkip || !isTextPhase) return;
+
+    if (currentIndex < greetings.length) {
+      const timer = setTimeout(() => {
+        setCurrentIndex(prev => prev + 1);
+      }, 500); // 0.5s per greeting
+      return () => clearTimeout(timer);
+    } else {
+      // Text phase complete, start reveal
+      const timer = setTimeout(() => {
+        sessionStorage.setItem("hasSeenIntro", "true");
+        setIsTextPhase(false);
+        setIsRevealing(true);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, isTextPhase, shouldSkip]);
 
   // Complete animation after reveal
   useEffect(() => {
     if (isRevealing) {
       const timer = setTimeout(() => {
         onComplete();
-      }, 900);
+      }, 1000); // Match curtain duration
       return () => clearTimeout(timer);
     }
   }, [isRevealing, onComplete]);
 
   if (shouldSkip) return null;
-
   return (
     <motion.div
-      ref={containerRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
-      style={{ backgroundColor: '#0a0a0a' }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-end cursor-pointer"
+      style={{ backgroundColor: 'hsl(var(--background))' }}
       onClick={!isRevealing ? handleSkip : undefined}
-      initial={{ y: 0, opacity: 1 }}
-      animate={{
-        y: isRevealing ? '-100vh' : 0,
-        opacity: isRevealing ? 0 : 1
-      }}
+      initial={{ y: 0 }}
+      animate={{ y: isRevealing ? '-100vh' : 0 }}
       transition={{
-        duration: 0.9,
+        duration: 1.0,
         ease: easingInOut
       }}
     >
-      {/* Welcome text - centered */}
-      <div ref={textRef} className="relative h-24 flex items-center justify-center overflow-hidden">
+      {/* Welcome text - positioned at bottom center */}
+      <div className="absolute bottom-[10vh] left-0 right-0 flex justify-center">
         <AnimatePresence mode="wait">
-          {isTextPhase && (
+          {isTextPhase && currentIndex < greetings.length && (
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, y: 40, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -30, scale: 0.95 }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
               transition={{
-                duration: 0.4,
-                ease: [0.22, 1, 0.36, 1]
+                duration: 0.25,
+                ease: easing
               }}
-              className="absolute text-center"
+              className="text-center"
             >
-              <h1
-                className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold"
-                style={{
-                  color: '#208ECB',
-                  textShadow: '0 0 30px rgba(32,142,203,0.6), 0 0 60px rgba(32,142,203,0.4), 0 2px 10px rgba(0,0,0,0.8)'
-                }}
-              >
-                {greetings[currentIndex]?.text}
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary">
+                {greetings[currentIndex].text}
               </h1>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Progress indicator */}
-      <motion.div
-        className="absolute bottom-12 flex gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ delay: 0.5 }}
-      >
-        {greetings.map((_, index) => (
-          <motion.div
-            key={index}
-            className="w-2 h-2 rounded-full"
-            animate={{
-              backgroundColor: index <= currentIndex
-                ? 'hsl(var(--primary))'
-                : 'hsl(var(--muted-foreground))',
-              scale: index === currentIndex ? 1.2 : 1
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        ))}
-      </motion.div>
-
       {/* Skip hint */}
       {isTextPhase && (
         <motion.p
-          className="absolute bottom-6 text-muted-foreground text-xs font-mono tracking-wider uppercase"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-muted-foreground text-xs font-mono tracking-wider uppercase"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
-          transition={{ delay: 1.5, duration: 0.4 }}
+          transition={{ delay: 1, duration: 0.4 }}
         >
           tap to skip
         </motion.p>
       )}
+
+      {/* Auto Scroll Button */}
+      <AnimatePresence>
+        {showScrollButton && !isRevealing && (
+          <motion.button
+            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground transition-colors duration-300 cursor-pointer px-4 py-3 z-10"
+            style={{ bottom: '7vh' }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.5, ease: easing }}
+            whileHover={prefersReducedMotion ? undefined : { y: 4, opacity: 1 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAutoScroll();
+            }}
+            aria-label="Scroll to explore"
+          >
+            <motion.div
+              animate={prefersReducedMotion ? undefined : { y: [0, 8, 0] }}
+              transition={prefersReducedMotion ? undefined : {
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut" as const
+              }}
+            >
+              <ChevronDown className="w-5 h-5" strokeWidth={1.5} />
+            </motion.div>
+            <span
+              className="text-xs font-medium tracking-widest uppercase"
+              style={{ fontSize: '11px', letterSpacing: '0.1em' }}
+            >
+              Explore
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
