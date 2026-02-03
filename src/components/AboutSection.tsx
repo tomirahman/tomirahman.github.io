@@ -57,7 +57,7 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
         {/* Interactive Particles Background */}
         <Particles
           className="absolute inset-0 z-[1]"
-          quantity={80}
+          quantity={40}
           staticity={30}
           ease={80}
           size={0.5}

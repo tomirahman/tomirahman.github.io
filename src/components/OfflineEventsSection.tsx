@@ -115,7 +115,7 @@ const OfflineEventsSection = () => {
         <NodesPattern opacity={0.02} />
         <FloatingLines
           lineColor="hsla(202, 74%, 46%, 0.3)"
-          count={200}
+          count={70}
           minWidth={1}
           maxWidth={4}
         />
