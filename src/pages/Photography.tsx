@@ -4,9 +4,10 @@ import { ArrowLeft, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import GlobalAudioButton from "@/components/GlobalAudioButton";
 import { useGlobalAudio } from "@/hooks/useGlobalAudio";
-import PhotoStrip from "@/components/photography/PhotoStrip";
+import PhotographySection from "@/components/PhotographySection";
 import CinematicViewer from "@/components/photography/CinematicViewer";
 import { AnimatePresence } from "framer-motion";
+import Prism from "@/components/ui/prism";
 
 // Import static photos
 import photo1 from "@/assets/photo-1.jpg";
@@ -100,88 +101,54 @@ const Photography = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-30 bg-card/90 backdrop-blur-md border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/">
-            <Button variant="ghost" className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Portfolio
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2 text-primary">
-            <Camera className="w-5 h-5" />
-            <span className="font-display text-lg hidden sm:inline">Photography</span>
+    <main className="min-h-screen bg-background relative overflow-hidden">
+      <Prism className="z-0 opacity-40" speed={0.5} />
+      <div className="relative z-10 w-full">
+        {/* Header */}
+        <header className="fixed top-0 left-0 right-0 z-30 bg-card/90 backdrop-blur-md border-b border-border">
+          <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <Link to="/">
+              <Button variant="ghost" className="gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Portfolio
+              </Button>
+            </Link>
+            <div className="flex items-center gap-2 text-primary">
+              <Camera className="w-5 h-5" />
+              <span className="font-display text-lg hidden sm:inline">Photography</span>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Hero */}
-      <section className="pt-28 pb-8 md:pt-32 md:pb-12 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1
-            className={`font-display text-4xl md:text-5xl lg:text-6xl text-primary mb-4 transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-          >
-            Through My Lens
-          </h1>
-          <p
-            className={`font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-            style={{ transitionDelay: "200ms" }}
-          >
-            Capturing moments, telling stories through light and shadow.
-          </p>
+        {/* Photo Stories Strip */}
+        <div
+          className={`transition-opacity duration-1000 ease-gentle ${isVisible ? "opacity-100" : "opacity-0"
+            }`}
+          style={{ transitionDelay: "400ms" }}
+        >
+          <PhotographySection photos={photos} onPhotoClick={handleOpenPhoto} />
         </div>
-      </section>
 
-      {/* Photo Stories Strip */}
-      <div
-        className={`transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        style={{ transitionDelay: "400ms" }}
-      >
-        <PhotoStrip photos={photos} onPhotoClick={handleOpenPhoto} />
+
+
+
+
+        {/* Global Audio Button */}
+        <GlobalAudioButton />
+
+        {/* Cinematic Fullscreen Viewer */}
+        <AnimatePresence>
+          {viewerOpen && (
+            <CinematicViewer
+              items={allMedia}
+              currentIndex={viewerIndex}
+              onClose={handleCloseViewer}
+              onNavigate={setViewerIndex}
+            />
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Reflective text */}
-      <section className="py-16 px-6 bg-secondary mt-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="font-body text-muted-foreground leading-relaxed">
-            These images represent more than just pixels — they're memories, emotions,
-            and perspectives frozen in time.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto text-center">
-          <Link to="/">
-            <Button variant="outline" className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Return to Portfolio
-            </Button>
-          </Link>
-        </div>
-      </footer>
-
-      {/* Global Audio Button */}
-      <GlobalAudioButton />
-
-      {/* Cinematic Fullscreen Viewer */}
-      <AnimatePresence>
-        {viewerOpen && (
-          <CinematicViewer
-            items={allMedia}
-            currentIndex={viewerIndex}
-            onClose={handleCloseViewer}
-            onNavigate={setViewerIndex}
-          />
-        )}
-      </AnimatePresence>
-    </main>
+    </main >
   );
 };
 

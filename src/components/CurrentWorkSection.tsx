@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { Server, Users, Zap } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
-import ShinyText from "./ui/ShinyText";
+import { AnimatedShinyText } from "./ui/animated-shiny-text";
 import Ripple from "./ui/ripple";
-import WarpBackground from "./ui/warp-background";
+import BorderBeam from "./ui/border-beam";
 
 interface CurrentWork {
   icon: React.ReactNode;
@@ -86,7 +86,7 @@ const CurrentWorkSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
           >
-            <ShinyText speed={4}>What I'm Working On</ShinyText>
+            <AnimatedShinyText className="inline-block" shimmerWidth={100}>What I'm Working On</AnimatedShinyText>
           </motion.h2>
         </div>
 
@@ -117,7 +117,10 @@ const CurrentWorkSection = () => {
                 ease: easing
               }}
             >
-              <WarpBackground className="bg-card p-6 rounded-xl border border-border hover:border-primary/40 transition-all duration-200 relative overflow-hidden h-full card-interactive">
+              <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/40 transition-all duration-200 relative overflow-hidden h-full card-interactive group">
+                {/* Border Beam - ONLY for Active/Ongoing items if requested, but user implied all 3 */}
+                <BorderBeam duration={8} size={100} />
+
                 {/* Number indicator */}
                 <span className="absolute top-4 right-4 font-mono text-xs text-muted-foreground/50">
                   {String(index + 1).padStart(2, "0")}
@@ -142,7 +145,7 @@ const CurrentWorkSection = () => {
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">
                   {work.description}
                 </p>
-              </WarpBackground>
+              </div>
             </motion.div>
           ))}
         </div>

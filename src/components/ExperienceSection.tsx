@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
 import gsap from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
-import ShinyText from "./ui/ShinyText";
+import { AnimatedShinyText } from "./ui/animated-shiny-text";
 
 // Import logos
 import mantaLogo from "@/assets/logos/manta.png";
@@ -214,10 +214,14 @@ const ExperienceSection = () => {
           {/* Title Card */}
           <div className="flex-shrink-0 w-[300px] md:w-[400px]">
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-              <ShinyText speed={4}>MY</ShinyText>
+              <AnimatedShinyText className="inline-block" shimmerWidth={100}>
+                MY
+              </AnimatedShinyText>
             </h2>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-sky-500 mb-6">
-              <ShinyText speed={4}>JOURNEY</ShinyText>
+              <AnimatedShinyText className="inline-block" shimmerWidth={100}>
+                JOURNEY
+              </AnimatedShinyText>
             </h2>
             <p className="font-body text-muted-foreground max-w-xs">
               Hands-on experience across Web3 infrastructure, validator operations, and community management.

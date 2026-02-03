@@ -7,6 +7,8 @@ import SectionDivider from "./SectionDivider";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import Masonry from "./ui/Masonry";
 import TrueFocus from "./ui/TrueFocus";
+import SplitText from "./ui/split-text";
+import FloatingLines from "./ui/floating-lines";
 
 // Import event photos
 import coinfest1 from "@/assets/events/coinfest-1.jpg";
@@ -105,9 +107,18 @@ const OfflineEventsSection = () => {
       {/* Floating Crypto Icons */}
       <FloatingCryptoIcons section="events" />
 
-      {/* Layer 1: Nodes pattern with parallax */}
-      <motion.div style={{ y: smoothBgY }}>
-        <NodesPattern opacity={0.04} />
+      {/* Layer 1: Nodes pattern with parallax + Floating Lines */}
+      <motion.div
+        style={{ y: smoothBgY }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%] z-0"
+      >
+        <NodesPattern opacity={0.02} />
+        <FloatingLines
+          lineColor="hsla(202, 74%, 46%, 0.3)"
+          count={200}
+          minWidth={1}
+          maxWidth={4}
+        />
       </motion.div>
 
       {/* Layer 2: Gradient overlays */}
@@ -211,7 +222,16 @@ const OfflineEventsSection = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {event.name}
+                    <SplitText
+                      text={event.name}
+                      className="font-display text-2xl md:text-3xl text-primary"
+                      delay={40}
+                      animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
+                      animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
+                      threshold={0.2}
+                      rootMargin="-50px"
+                      textAlign="left"
+                    />
                   </motion.h3>
 
                   <motion.div
@@ -263,8 +283,8 @@ const OfflineEventsSection = () => {
             </motion.div>
           ))}
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

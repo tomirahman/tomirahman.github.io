@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { CheckCircle } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
-import ShinyText from "./ui/ShinyText";
+import { AnimatedShinyText } from "./ui/animated-shiny-text";
 import Particles from "./ui/particles";
 import TextReveal from "./ui/text-reveal";
 
@@ -96,9 +96,9 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
             >
-              <ShinyText speed={4} shimmerWidth={120}>
+              <AnimatedShinyText className="inline-block" shimmerWidth={100}>
                 PASSIONATE
-              </ShinyText>
+              </AnimatedShinyText>
             </motion.h2>
           </div>
           <div className="overflow-hidden inline-block ml-3">
@@ -110,9 +110,9 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2, ease: easing }}
             >
-              <ShinyText speed={4.5} shimmerWidth={100} className="text-muted-foreground">
+              <AnimatedShinyText className="inline-block text-muted-foreground" shimmerWidth={100}>
                 BUILDER
-              </ShinyText>
+              </AnimatedShinyText>
             </motion.span>
           </div>
         </div>

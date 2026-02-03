@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Server, Users, TrendingUp, FileText, Search, Share2 } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import MagicBento from "./ui/MagicBento";
-import ShinyText from "./ui/ShinyText";
+import { AnimatedShinyText } from "./ui/animated-shiny-text";
 
 interface Skill {
   icon: React.ReactNode;
@@ -115,7 +115,9 @@ const SkillsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
             >
-              <ShinyText speed={4}>TECH</ShinyText>
+              <AnimatedShinyText className="inline-block" shimmerWidth={100}>
+                TECH
+              </AnimatedShinyText>
             </motion.h2>
           </div>
           <div className="overflow-hidden inline-block ml-3">
@@ -127,7 +129,9 @@ const SkillsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2, ease: easing }}
             >
-              <ShinyText speed={4}>STACK</ShinyText>
+              <AnimatedShinyText className="inline-block" shimmerWidth={100}>
+                STACK
+              </AnimatedShinyText>
             </motion.span>
           </div>
         </div>

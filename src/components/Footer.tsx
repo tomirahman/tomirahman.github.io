@@ -4,6 +4,7 @@ import { MaskReveal, MagneticButton } from "./ui/GSAPAnimations";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import AnalogClock from "./ui/AnalogClock";
 import Highlighter from "./ui/highlighter";
+import Dither from "./ui/dither";
 
 const DiscordIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -34,6 +35,14 @@ const Footer = ({ email, socialLinks }: FooterProps) => {
 
   return (
     <footer id="contact" className="py-20 px-6 bg-primary text-primary-foreground relative overflow-hidden">
+      {/* Dither Background Effect */}
+      <Dither
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+        waveColor={[0.8, 0.8, 0.8]}
+        disableAnimation={false}
+        enableMouseInteraction={true}
+      />
+
       {/* Floating Crypto Icons */}
       <FloatingCryptoIcons section="footer" />
 
