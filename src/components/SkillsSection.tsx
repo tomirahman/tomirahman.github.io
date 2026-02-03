@@ -72,7 +72,7 @@ const SkillsSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-screen py-24 md:py-32 px-6 bg-muted/30 relative overflow-hidden flex items-center"
+      className="min-h-svh py-[clamp(3rem,8vh,6rem)] px-[clamp(1rem,5vw,3rem)] bg-muted/30 relative overflow-hidden flex items-center"
     >
       {/* Giant Watermark Background with Parallax */}
       <motion.div

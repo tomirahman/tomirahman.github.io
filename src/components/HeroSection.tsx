@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import HeroBackground from "./hero/HeroBackground";
 import HeroContent from "./hero/HeroContent";
+import Meteors from "./ui/meteors";
 
 interface HeroSectionProps {
   name: string;
@@ -10,13 +11,13 @@ interface HeroSectionProps {
 }
 
 /**
- * HERO LOCK SPEC - Clean & Minimal with Parallax
+ * HERO LOCK SPEC - Clean & Minimal with Parallax + Meteors
  * 
- * - Solid background (no doodle)
+ * - Solid background with meteor shower effect
  * - Large "TOMI" parallax background text
  * - NO floating logos in hero (they go to other sections)
  * - Focus 100% on name
- * - Calm, confident, modern
+ * - Calm, confident, modern with dynamic visual flair
  */
 const HeroSection = ({ name, tagline, introComplete = true }: HeroSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -35,14 +36,19 @@ const HeroSection = ({ name, tagline, introComplete = true }: HeroSectionProps) 
   return (
     <motion.div
       ref={sectionRef}
-      className="relative min-h-screen bg-background w-full"
+      className="relative min-h-svh bg-background w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: introComplete ? 1 : 0 }}
       transition={{ duration: 0.8, ease: easing }}
       style={{ overflow: 'hidden' }}
     >
-      {/* Clean Background - z-index: 0 */}
-      <div style={{ position: 'relative', zIndex: 0 }}>
+      {/* Meteor Shower Effect - z-index: 0 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <Meteors number={25} />
+      </div>
+
+      {/* Clean Background - z-index: 1 */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
         <HeroBackground />
       </div>
 
@@ -52,7 +58,7 @@ const HeroSection = ({ name, tagline, introComplete = true }: HeroSectionProps) 
         style={{
           y: smoothParallaxY,
           opacity: bgOpacity,
-          zIndex: 1
+          zIndex: 2
         }}
       >
         <span className="font-display text-[30vw] font-bold text-foreground tracking-tighter">
@@ -75,3 +81,4 @@ const HeroSection = ({ name, tagline, introComplete = true }: HeroSectionProps) 
 };
 
 export default HeroSection;
+

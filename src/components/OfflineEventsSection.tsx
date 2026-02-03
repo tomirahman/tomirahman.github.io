@@ -100,7 +100,7 @@ const OfflineEventsSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-screen py-20 md:py-28 px-6 bg-secondary/30 relative overflow-hidden"
+      className="min-h-svh py-[clamp(3rem,8vh,6rem)] px-[clamp(1rem,5vw,3rem)] bg-secondary/30 relative overflow-hidden"
     >
       {/* Floating Crypto Icons */}
       <FloatingCryptoIcons section="events" />

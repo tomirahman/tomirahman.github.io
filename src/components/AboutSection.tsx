@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { CheckCircle } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import ShinyText from "./ui/ShinyText";
+import Particles from "./ui/particles";
+import TextReveal from "./ui/text-reveal";
 
 interface AboutSectionProps {
   stats?: { label: string; value: string }[];
@@ -31,32 +33,45 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-screen py-24 md:py-32 px-6 relative overflow-hidden flex items-center"
+      className="min-h-svh py-[clamp(3rem,8vh,6rem)] relative flex flex-col items-center"
       style={{ backgroundColor: '#84CFFC' }}
     >
-      {/* Curtain removed - section now shows content directly */}
+      {/* Background with overflow hidden for particles/watermark */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Giant Watermark Background */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 whitespace-nowrap"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: easing }}
+        >
+          <span className="font-display text-[25vw] font-bold text-foreground/[0.03] tracking-tight">
+            ABOUT ME
+          </span>
+        </motion.div>
 
-      {/* Giant Watermark Background */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0 whitespace-nowrap"
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2, ease: easing }}
-      >
-        <span className="font-display text-[25vw] font-bold text-foreground/[0.03] tracking-tight">
-          ABOUT ME
-        </span>
-      </motion.div>
+        {/* Floating Crypto Icons */}
+        <FloatingCryptoIcons section="about" />
 
-      {/* Floating Crypto Icons */}
-      <FloatingCryptoIcons section="about" />
+        {/* Interactive Particles Background */}
+        <Particles
+          className="absolute inset-0 z-[1]"
+          quantity={80}
+          staticity={30}
+          ease={80}
+          size={0.5}
+          color="#ffffff"
+          vx={0}
+          vy={0}
+        />
+      </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="w-full max-w-4xl mx-auto relative z-10 px-[clamp(1rem,5vw,3rem)]">
         {/* Section Label */}
         <motion.div
-          className="mb-6"
+          className="mb-6 text-center"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -110,81 +125,17 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: easing, delay: 0.25 }}
         />
+      </div>
 
-        {/* Who I am */}
-        <motion.div
-          className="text-center mb-8"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: easing, delay: 0.3 }}
-        >
-          <p className="font-body text-lg md:text-xl leading-relaxed text-foreground/90 mb-4">
-            I'm a <span className="font-semibold text-primary underline decoration-accent/50 decoration-2 underline-offset-4">Web3 infrastructure and community professional</span> with experience operating validator nodes across Ethereum-based networks.
-          </p>
-          <p className="font-body text-lg md:text-xl leading-relaxed text-foreground/80">
-            I actively moderate global and regional Web3 communities, translating complex technical updates into clear, actionable insights.
-          </p>
-        </motion.div>
+      {/* Text Reveal - Replaces the static paragraph, stats, and lists */}
+      <div className="w-full relative z-10">
+        <TextReveal
+          text="I am a Web3 infrastructure and community professional operating validator nodes across Ethereum L2s. I bridge the gap between technical infrastructure and human communities. I bring hands-on experience running validator nodes, global and Indonesia-focused community expertise, and over 5+ years in Web3 Infrastructure. I have moderated 10+ communities and operated 5+ networks, focusing on Global and Indonesian regions."
+          className="h-[300vh]"
+        />
+      </div>
 
-        {/* What makes me different */}
-        <motion.div
-          className="mb-16"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: easing, delay: 0.4 }}
-        >
-          <div className="bg-card rounded-xl p-6 md:p-8 border border-border shadow-soft">
-            <div className="flex flex-col items-center gap-4">
-              {differentiators.map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-center gap-3 text-foreground/90"
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.5 + index * 0.1, ease: easing }}
-                >
-                  <CheckCircle className="w-5 h-5 flex-shrink-0 text-primary" />
-                  <span className="font-body text-base md:text-lg">{item}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Stats */}
-        {stats && stats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="text-center"
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.6 + index * 0.08,
-                  ease: easing
-                }}
-              >
-                <div className="font-display text-4xl md:text-5xl mb-2 text-primary">
-                  {stat.value}
-                </div>
-                <div className="font-body text-sm tracking-display uppercase text-slate-700">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-
+      <div className="w-full max-w-4xl mx-auto relative z-10 px-[clamp(1rem,5vw,3rem)]">
         {/* Bottom quote */}
         <motion.div
           className="mt-16 text-center"

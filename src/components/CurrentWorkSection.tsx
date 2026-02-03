@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { Server, Users, Zap } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import ShinyText from "./ui/ShinyText";
+import Ripple from "./ui/ripple";
+import WarpBackground from "./ui/warp-background";
 
 interface CurrentWork {
   icon: React.ReactNode;
@@ -49,9 +51,12 @@ const CurrentWorkSection = () => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-screen py-20 md:py-24 px-6 bg-muted/20 relative overflow-hidden flex items-center"
+      className="min-h-svh py-[clamp(3rem,8vh,6rem)] px-[clamp(1rem,5vw,3rem)] bg-muted/20 relative overflow-hidden flex items-center"
     >
-      {/* Floating Crypto Icons */}
+      {/* Ripple Background Effect */}
+      <Ripple mainCircleSize={300} mainCircleOpacity={0.15} numCircles={8} />
+
+      {/* Floating CryptoIcons */}
       <FloatingCryptoIcons section="projects" />
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -111,9 +116,8 @@ const CurrentWorkSection = () => {
                 delay: 0.2 + index * 0.1,
                 ease: easing
               }}
-              className="group"
             >
-              <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/40 transition-all duration-200 relative overflow-hidden h-full card-interactive">
+              <WarpBackground className="bg-card p-6 rounded-xl border border-border hover:border-primary/40 transition-all duration-200 relative overflow-hidden h-full card-interactive">
                 {/* Number indicator */}
                 <span className="absolute top-4 right-4 font-mono text-xs text-muted-foreground/50">
                   {String(index + 1).padStart(2, "0")}
@@ -138,7 +142,7 @@ const CurrentWorkSection = () => {
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">
                   {work.description}
                 </p>
-              </div>
+              </WarpBackground>
             </motion.div>
           ))}
         </div>

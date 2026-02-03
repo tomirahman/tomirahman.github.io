@@ -99,6 +99,23 @@ export default {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        // Meteor falling animation
+        meteor: {
+          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
+          "70%": { opacity: "1" },
+          "100%": {
+            transform: "rotate(215deg) translateX(-500px)",
+            opacity: "0",
+          },
+        },
+        ripple: {
+          "0%, 100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "50%": {
+            transform: "translate(-50%, -50%) scale(0.9)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -107,6 +124,8 @@ export default {
         "reveal-up": "reveal-up 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards",
         "fade-in": "fade-in 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards",
         marquee: "marquee 30s linear infinite",
+        meteor: "meteor 5s linear infinite",
+        ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
       },
       transitionTimingFunction: {
         // power2.out equivalent - the ONLY easing to use

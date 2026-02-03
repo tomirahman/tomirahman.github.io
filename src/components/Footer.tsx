@@ -3,6 +3,7 @@ import { Mail, Instagram, Linkedin, Twitter, Send } from "lucide-react";
 import { MaskReveal, MagneticButton } from "./ui/GSAPAnimations";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import AnalogClock from "./ui/AnalogClock";
+import Highlighter from "./ui/highlighter";
 
 const DiscordIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -38,21 +39,26 @@ const Footer = ({ email, socialLinks }: FooterProps) => {
 
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Contact Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 flex flex-col items-center">
           <MaskReveal>
-            <h2 className="font-display text-3xl md:text-4xl mb-4">
+            <h2 className="font-display text-3xl md:text-4xl mb-6">
               Let's Connect
             </h2>
           </MaskReveal>
-          <motion.p
-            className="font-body text-primary-foreground/70 text-lg"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Available for Web3 infrastructure, community, and ecosystem opportunities
-          </motion.p>
+
+          <div className="inline-block">
+            <Highlighter className="rounded-full bg-primary-foreground/5 border border-primary-foreground/10 overflow-hidden">
+              <motion.div
+                className="px-6 py-2 font-body text-primary-foreground/90 text-lg relative z-10"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Available for Web3 infrastructure, community, and ecosystem opportunities
+              </motion.div>
+            </Highlighter>
+          </div>
         </div>
 
         {/* Social Links - With magnetic effect */}
