@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { Server, Users, Zap } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
+import ShinyText from "./ui/ShinyText";
 
 interface CurrentWork {
   icon: React.ReactNode;
@@ -46,7 +47,7 @@ const CurrentWorkSection = () => {
   const easing: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 
   return (
-    <div 
+    <div
       ref={sectionRef}
       className="min-h-screen py-20 md:py-24 px-6 bg-muted/20 relative overflow-hidden flex items-center"
     >
@@ -55,7 +56,7 @@ const CurrentWorkSection = () => {
 
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Section Label */}
-        <motion.div 
+        <motion.div
           className="mb-6"
           variants={fadeUp}
           initial="hidden"
@@ -72,7 +73,7 @@ const CurrentWorkSection = () => {
 
         {/* Title */}
         <div className="overflow-hidden">
-          <motion.h2 
+          <motion.h2
             className="font-display text-3xl md:text-4xl lg:text-5xl text-center text-primary mb-4"
             variants={fadeUp}
             initial="hidden"
@@ -80,11 +81,11 @@ const CurrentWorkSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
           >
-            What I'm Working On
+            <ShinyText speed={4}>What I'm Working On</ShinyText>
           </motion.h2>
         </div>
 
-        <motion.div 
+        <motion.div
           className="flex justify-center mb-12"
           variants={fadeUp}
           initial="hidden"
@@ -105,8 +106,8 @@ const CurrentWorkSection = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: 0.2 + index * 0.1,
                 ease: easing
               }}
@@ -123,7 +124,7 @@ const CurrentWorkSection = () => {
                     {work.icon}
                   </div>
                   <span className="font-body text-xs tracking-wider uppercase px-2.5 py-1 bg-accent-green/10 text-accent-green rounded-full flex items-center gap-1.5">
-                    <motion.span 
+                    <motion.span
                       className="w-1.5 h-1.5 rounded-full bg-current"
                       animate={{ opacity: [1, 0.4, 1] }}
                       transition={{ repeat: Infinity, duration: 1.5 }}
@@ -143,7 +144,7 @@ const CurrentWorkSection = () => {
         </div>
 
         {/* Bottom quote */}
-        <motion.div 
+        <motion.div
           className="mt-12 text-center"
           variants={fadeUp}
           initial="hidden"

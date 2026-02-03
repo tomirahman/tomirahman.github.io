@@ -1,10 +1,9 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { Server, Users, TrendingUp, FileText, Search, Share2 } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import MagicBento from "./ui/MagicBento";
-import gsap from "@/lib/gsap-config";
-import { ScrollTrigger } from "@/lib/gsap-config";
+import ShinyText from "./ui/ShinyText";
 
 interface Skill {
   icon: React.ReactNode;
@@ -55,7 +54,6 @@ const supportingSkills: Skill[] = [
  */
 const SkillsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const supportCardsRef = useRef<HTMLDivElement[]>([]);
 
   // Parallax for watermark
   const { scrollYProgress } = useScroll({
@@ -64,45 +62,6 @@ const SkillsSection = () => {
   });
   const watermarkX = useTransform(scrollYProgress, [0, 1], ["30%", "15%"]);
   const smoothWatermarkX = useSpring(watermarkX, { stiffness: 100, damping: 30 });
-
-  // GSAP ScrollTrigger for supporting card animations
-  useEffect(() => {
-    const supportCards = supportCardsRef.current;
-
-    // Animate supporting skill cards
-    supportCards.forEach((card, index) => {
-      if (!card) return;
-      gsap.fromTo(card,
-        {
-          opacity: 0,
-          x: index % 2 === 0 ? -40 : 40,
-          scale: 0.95,
-        },
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            end: "top 65%",
-            toggleActions: "play none none reverse",
-          },
-          delay: index * 0.08,
-        }
-      );
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (supportCards.includes(trigger.vars.trigger as HTMLDivElement)) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
 
   const fadeUp = {
     hidden: { opacity: 0, y: 24 },
@@ -156,7 +115,7 @@ const SkillsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
             >
-              TECH
+              <ShinyText speed={4}>TECH</ShinyText>
             </motion.h2>
           </div>
           <div className="overflow-hidden inline-block ml-3">
@@ -168,7 +127,7 @@ const SkillsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2, ease: easing }}
             >
-              STACK
+              <ShinyText speed={4}>STACK</ShinyText>
             </motion.span>
           </div>
         </div>
@@ -233,29 +192,22 @@ const SkillsSection = () => {
             Supporting Skills
           </motion.h3>
 
-          <div className="grid md:grid-cols-3 gap-4">
-            {supportingSkills.map((skill, index) => (
-              <div
-                key={skill.title}
-                ref={(el) => { if (el) supportCardsRef.current[index] = el; }}
-                className="group"
-              >
-                <div className="bg-card/80 p-6 rounded-lg border border-border hover:border-primary/30 transition-all duration-200 h-full card-interactive">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="text-primary/70 p-2 bg-primary/5 rounded-lg">
-                      {skill.icon}
-                    </div>
-                    <h4 className="font-display text-lg text-primary">
-                      {skill.title}
-                    </h4>
-                  </div>
-                  <p className="font-body text-muted-foreground text-sm leading-relaxed">
-                    {skill.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <MagicBento
+            cards={supportingSkills.map((skill, index) => ({
+              icon: skill.icon,
+              title: skill.title,
+              description: skill.description,
+              label: String(index + 1).padStart(2, "0")
+            }))}
+            enableStars={true}
+            enableSpotlight={true}
+            enableBorderGlow={true}
+            enableTilt={true}
+            clickEffect={true}
+            enableMagnetism={true}
+            glowColor="56, 189, 248"
+            particleCount={6}
+          />
         </div>
       </div>
     </div>
