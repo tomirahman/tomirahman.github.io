@@ -1,23 +1,18 @@
 import { motion } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { CheckCircle } from "lucide-react";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import ShinyText from "./ui/ShinyText";
-import gsap from "@/lib/gsap-config";
-import { ScrollTrigger } from "@/lib/gsap-config";
 
 interface AboutSectionProps {
   stats?: { label: string; value: string }[];
 }
 
 /**
- * About section with curtain reveal animation.
- * The section content is revealed as a curtain slides up on scroll.
+ * About section with fade-in animations.
  */
 const AboutSection = ({ stats }: AboutSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const curtainRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const differentiators = [
     "Hands-on experience running validator nodes on Ethereum L2s",
@@ -32,44 +27,6 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
   };
   const easing: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
 
-  // Curtain reveal animation with GSAP
-  useEffect(() => {
-    const section = sectionRef.current;
-    const curtain = curtainRef.current;
-    const content = contentRef.current;
-
-    if (!section || !curtain || !content) return;
-
-    // Curtain slides up to reveal content
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top 80%",
-        end: "top 20%",
-        scrub: 0.5,
-      }
-    });
-
-    tl.fromTo(curtain,
-      { yPercent: 0 },
-      { yPercent: -100, ease: "power2.out" }
-    );
-
-    // Content fades in as curtain reveals
-    tl.fromTo(content,
-      { opacity: 0.3, y: 30 },
-      { opacity: 1, y: 0, ease: "power2.out" },
-      "<0.2"
-    );
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.vars.trigger === section) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
 
   return (
     <div
@@ -77,24 +34,7 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
       className="min-h-screen py-24 md:py-32 px-6 relative overflow-hidden flex items-center"
       style={{ backgroundColor: '#84CFFC' }}
     >
-      <div
-        ref={curtainRef}
-        className="absolute inset-0 z-30 pointer-events-none"
-        style={{ willChange: 'transform' }}
-      >
-        {/* Salmonish coral gradient - warm contrast against beige background */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(to bottom, #F08967 0%, #E07B5C 40%, #D06E50 70%, #C06045 100%)'
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="font-display text-6xl md:text-8xl text-white tracking-tight drop-shadow-lg">
-            SCROLL ↓
-          </span>
-        </div>
-      </div>
+      {/* Curtain removed - section now shows content directly */}
 
       {/* Giant Watermark Background */}
       <motion.div
@@ -112,8 +52,8 @@ const AboutSection = ({ stats }: AboutSectionProps) => {
       {/* Floating Crypto Icons */}
       <FloatingCryptoIcons section="about" />
 
-      {/* Main Content - revealed by curtain */}
-      <div ref={contentRef} className="max-w-4xl mx-auto relative z-10">
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto relative z-10">
         {/* Section Label */}
         <motion.div
           className="mb-6"

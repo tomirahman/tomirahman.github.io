@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import GlobalAudioButton from "@/components/GlobalAudioButton";
 import { useGlobalAudio } from "@/hooks/useGlobalAudio";
 import PhotoStrip from "@/components/photography/PhotoStrip";
-import VideoStrip from "@/components/photography/VideoStrip";
 import CinematicViewer from "@/components/photography/CinematicViewer";
 import { AnimatePresence } from "framer-motion";
 
@@ -70,33 +69,21 @@ const photos = [
   { id: 28, src: photo28, alt: "Sunset Horizon", caption: "Golden Farewell", quote: "Every sunset is a chance to start fresh tomorrow." },
 ];
 
-const videos = [
-  { id: 1, src: "/videos/video-1.mp4", caption: "Island Life" },
-];
-
 const Photography = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
-  
+
   // Initialize global audio for photography page
   useGlobalAudio("photography");
 
-  // Combine all media for unified viewer
+  // All media for unified viewer (photos only now)
   const allMedia = useMemo(() => {
-    const photoItems = photos.map(p => ({
+    return photos.map(p => ({
       ...p,
       type: "photo" as const,
     }));
-    const videoItems = videos.map(v => ({
-      ...v,
-      alt: v.caption || "Video",
-      type: "video" as const,
-    }));
-    return [...photoItems, ...videoItems];
   }, []);
-
-  const photoCount = photos.length;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -107,12 +94,6 @@ const Photography = () => {
     setViewerIndex(index);
     setViewerOpen(true);
   }, []);
-
-  const handleOpenVideo = useCallback((index: number) => {
-    // Video indices start after all photos
-    setViewerIndex(photoCount + index);
-    setViewerOpen(true);
-  }, [photoCount]);
 
   const handleCloseViewer = useCallback(() => {
     setViewerOpen(false);
@@ -140,16 +121,14 @@ const Photography = () => {
       <section className="pt-28 pb-8 md:pt-32 md:pb-12 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1
-            className={`font-display text-4xl md:text-5xl lg:text-6xl text-primary mb-4 transition-all duration-1000 ease-gentle ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+            className={`font-display text-4xl md:text-5xl lg:text-6xl text-primary mb-4 transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
           >
             Through My Lens
           </h1>
           <p
-            className={`font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed transition-all duration-1000 ease-gentle ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+            className={`font-body text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
             style={{ transitionDelay: "200ms" }}
           >
             Capturing moments, telling stories through light and shadow.
@@ -159,29 +138,18 @@ const Photography = () => {
 
       {/* Photo Stories Strip */}
       <div
-        className={`transition-all duration-1000 ease-gentle ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
+        className={`transition-all duration-1000 ease-gentle ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         style={{ transitionDelay: "400ms" }}
       >
         <PhotoStrip photos={photos} onPhotoClick={handleOpenPhoto} />
-      </div>
-
-      {/* Video Moments Strip */}
-      <div
-        className={`transition-all duration-1000 ease-gentle ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-        style={{ transitionDelay: "600ms" }}
-      >
-        <VideoStrip videos={videos} onVideoClick={handleOpenVideo} />
       </div>
 
       {/* Reflective text */}
       <section className="py-16 px-6 bg-secondary mt-8">
         <div className="max-w-2xl mx-auto text-center">
           <p className="font-body text-muted-foreground leading-relaxed">
-            These images represent more than just pixels — they're memories, emotions, 
+            These images represent more than just pixels — they're memories, emotions,
             and perspectives frozen in time.
           </p>
         </div>

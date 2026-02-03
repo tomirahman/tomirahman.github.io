@@ -6,6 +6,7 @@ import { MaskReveal, ScrollFade, LineDraw } from "./ui/GSAPAnimations";
 import SectionDivider from "./SectionDivider";
 import FloatingCryptoIcons from "./FloatingCryptoIcons";
 import Masonry from "./ui/Masonry";
+import TrueFocus from "./ui/TrueFocus";
 
 // Import event photos
 import coinfest1 from "@/assets/events/coinfest-1.jpg";
@@ -131,7 +132,7 @@ const OfflineEventsSection = () => {
           </div>
         </MaskReveal>
 
-        {/* Title */}
+        {/* Title with TrueFocus effect */}
         <div className="overflow-hidden mb-4">
           <motion.h2
             className="font-display text-4xl md:text-5xl lg:text-6xl text-center text-primary"
@@ -140,7 +141,14 @@ const OfflineEventsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            Offline Events & Community
+            <TrueFocus
+              sentence="Offline Events & Community"
+              blurAmount={4}
+              animationDuration={0.6}
+              pauseBetweenAnimations={1.5}
+              borderColor="hsl(var(--primary))"
+              glowColor="hsl(var(--primary) / 0.5)"
+            />
           </motion.h2>
         </div>
 

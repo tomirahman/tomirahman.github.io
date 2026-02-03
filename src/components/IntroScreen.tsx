@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 
 interface IntroScreenProps {
   onComplete: () => void;
@@ -14,38 +13,52 @@ const greetings = [
   { text: "Hola", lang: "es" },
 ];
 
+const statusMessages = [
+  { threshold: 0, text: "INITIALIZING..." },
+  { threshold: 30, text: "LOADING ASSETS..." },
+  { threshold: 60, text: "PREPARING INTERFACE..." },
+  { threshold: 90, text: "ALMOST READY..." },
+];
+
 /**
- * Full-screen intro with curtain reveal animation.
+ * Full-screen intro with greeting sequence + percentage loader animation.
  * 
  * Flow:
- * 1. Full viewport blank screen (theme-aware)
- * 2. Welcome text sequence at bottom center
- * 3. Curtain opens (screen slides up) revealing content
+ * 1. Full viewport screen with greeting text cycling at top
+ * 2. Large percentage counter (0-100%) in center
+ * 3. Status text cycling based on percentage
+ * 4. Fade out transition to reveal content
  * 
  * Performance:
  * - Plays once per session (sessionStorage)
- * - Skippable via click/scroll
+ * - Skippable via click
  * - Respects prefers-reduced-motion
  */
 const IntroScreen = ({ onComplete }: IntroScreenProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTextPhase, setIsTextPhase] = useState(true);
-  const [isRevealing, setIsRevealing] = useState(false);
+  const [percentage, setPercentage] = useState(0);
+  const [greetingIndex, setGreetingIndex] = useState(0);
+  const [statusText, setStatusText] = useState(statusMessages[0].text);
+  const [isComplete, setIsComplete] = useState(false);
   const [shouldSkip, setShouldSkip] = useState(false);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const animationRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
 
-  // Power2.out equivalent easing
+  // Smooth easing function
+  const easeOutQuart = (t: number): number => {
+    return 1 - Math.pow(1 - t, 4);
+  };
+
+  // Animation easings
   const easing: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
-  // Power2.inOut for curtain
   const easingInOut: [number, number, number, number] = [0.45, 0, 0.55, 1];
+
+  // Duration in milliseconds
+  const ANIMATION_DURATION = 3000;
 
   // Check if intro should be skipped
   useEffect(() => {
     const hasSeenIntro = sessionStorage.getItem("hasSeenIntro");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setPrefersReducedMotion(reducedMotion);
 
     if (hasSeenIntro || reducedMotion) {
       setShouldSkip(true);
@@ -53,159 +66,187 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
     }
   }, [onComplete]);
 
-  // Show scroll button after first greeting appears
+  // Cycle through greetings
   useEffect(() => {
-    if (shouldSkip || hasScrolled) return;
+    if (shouldSkip || isComplete) return;
 
-    const timer = setTimeout(() => {
-      setShowScrollButton(true);
-    }, 800); // Show after first word starts fading in
+    const interval = setInterval(() => {
+      setGreetingIndex(prev => (prev + 1) % greetings.length);
+    }, 500);
 
-    return () => clearTimeout(timer);
-  }, [shouldSkip, hasScrolled]);
+    return () => clearInterval(interval);
+  }, [shouldSkip, isComplete]);
 
-  // Listen for manual scroll to hide button
+  // Update status text based on percentage
   useEffect(() => {
-    if (shouldSkip || isRevealing) return;
+    const currentStatus = [...statusMessages]
+      .reverse()
+      .find(s => percentage >= s.threshold);
+    if (currentStatus) {
+      setStatusText(currentStatus.text);
+    }
+  }, [percentage]);
 
-    const handleScroll = () => {
-      setHasScrolled(true);
-      setShowScrollButton(false);
+  // Animate percentage counter
+  useEffect(() => {
+    if (shouldSkip || isComplete) return;
+
+    const animate = (timestamp: number) => {
+      if (!startTimeRef.current) {
+        startTimeRef.current = timestamp;
+      }
+
+      const elapsed = timestamp - startTimeRef.current;
+      const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+      const easedProgress = easeOutQuart(progress);
+      const currentPercentage = Math.round(easedProgress * 100);
+
+      setPercentage(currentPercentage);
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        // Animation complete
+        setTimeout(() => {
+          sessionStorage.setItem("hasSeenIntro", "true");
+          setIsComplete(true);
+        }, 400);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll, { once: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [shouldSkip, isRevealing]);
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [shouldSkip, isComplete]);
+
+  // Complete animation after fade out
+  useEffect(() => {
+    if (isComplete) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isComplete, onComplete]);
 
   // Skip handler
   const handleSkip = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
     sessionStorage.setItem("hasSeenIntro", "true");
-    setIsTextPhase(false);
-    setIsRevealing(true);
-    setShowScrollButton(false);
+    setPercentage(100);
+    setStatusText("ALMOST READY...");
+    setTimeout(() => {
+      setIsComplete(true);
+    }, 200);
   }, []);
 
-  // Auto scroll handler
-  const handleAutoScroll = useCallback(() => {
-    setShowScrollButton(false);
-    handleSkip();
-  }, [handleSkip]);
-
-  // Progress through greetings (0.45-0.55s per greeting)
-  useEffect(() => {
-    if (shouldSkip || !isTextPhase) return;
-
-    if (currentIndex < greetings.length) {
-      const timer = setTimeout(() => {
-        setCurrentIndex(prev => prev + 1);
-      }, 500); // 0.5s per greeting
-      return () => clearTimeout(timer);
-    } else {
-      // Text phase complete, start reveal
-      const timer = setTimeout(() => {
-        sessionStorage.setItem("hasSeenIntro", "true");
-        setIsTextPhase(false);
-        setIsRevealing(true);
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, isTextPhase, shouldSkip]);
-
-  // Complete animation after reveal
-  useEffect(() => {
-    if (isRevealing) {
-      const timer = setTimeout(() => {
-        onComplete();
-      }, 1000); // Match curtain duration
-      return () => clearTimeout(timer);
-    }
-  }, [isRevealing, onComplete]);
-
   if (shouldSkip) return null;
+
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-end cursor-pointer"
-      style={{ backgroundColor: 'hsl(var(--background))' }}
-      onClick={!isRevealing ? handleSkip : undefined}
-      initial={{ y: 0 }}
-      animate={{ y: isRevealing ? '-100vh' : 0 }}
-      transition={{
-        duration: 1.0,
-        ease: easingInOut
-      }}
-    >
-      {/* Welcome text - positioned at bottom center */}
-      <div className="absolute bottom-[10vh] left-0 right-0 flex justify-center">
-        <AnimatePresence mode="wait">
-          {isTextPhase && currentIndex < greetings.length && (
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.25,
-                ease: easing
-              }}
-              className="text-center"
-            >
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary">
-                {greetings[currentIndex].text}
-              </h1>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Skip hint */}
-      {isTextPhase && (
-        <motion.p
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-muted-foreground text-xs font-mono tracking-wider uppercase"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ delay: 1, duration: 0.4 }}
+    <AnimatePresence>
+      {!isComplete ? (
+        <motion.div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer"
+          style={{ backgroundColor: 'hsl(var(--background))' }}
+          onClick={handleSkip}
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.8,
+            ease: easingInOut
+          }}
         >
-          tap to skip
-        </motion.p>
-      )}
+          {/* Greeting text cycling at top */}
+          <div className="absolute top-[25vh] left-0 right-0 flex justify-center h-16 sm:h-20">
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={greetingIndex}
+                className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2, ease: easing }}
+              >
+                {greetings[greetingIndex].text}
+              </motion.h1>
+            </AnimatePresence>
+          </div>
 
-      {/* Auto Scroll Button */}
-      <AnimatePresence>
-        {showScrollButton && !isRevealing && (
-          <motion.button
-            className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-foreground/60 hover:text-foreground transition-colors duration-300 cursor-pointer px-4 py-3 z-10"
-            style={{ bottom: '7vh' }}
-            initial={{ opacity: 0, y: 10 }}
+          {/* Center content - Name and Counter */}
+          <motion.span
+            className="text-[10px] sm:text-xs tracking-[0.3em] text-muted-foreground uppercase font-light"
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.5, ease: easing }}
-            whileHover={prefersReducedMotion ? undefined : { y: 4, opacity: 1 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAutoScroll();
-            }}
-            aria-label="Scroll to explore"
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <motion.div
-              animate={prefersReducedMotion ? undefined : { y: [0, 8, 0] }}
-              transition={prefersReducedMotion ? undefined : {
-                duration: 1.8,
-                repeat: Infinity,
-                ease: "easeInOut" as const
-              }}
-            >
-              <ChevronDown className="w-5 h-5" strokeWidth={1.5} />
-            </motion.div>
+            TOMI RAHMAN
+          </motion.span>
+
+          {/* Divider line */}
+          <motion.div
+            className="w-6 sm:w-8 h-px bg-muted-foreground/30 my-4 sm:my-6"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          />
+
+          {/* Large percentage counter */}
+          <motion.div
+            className="relative flex items-baseline"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <span
-              className="text-xs font-medium tracking-widest uppercase"
-              style={{ fontSize: '11px', letterSpacing: '0.1em' }}
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extralight text-foreground tabular-nums"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
             >
-              Explore
+              {percentage}
             </span>
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </motion.div>
+            <span className="text-xl sm:text-2xl md:text-3xl font-extralight text-foreground/70 ml-1">
+              %
+            </span>
+          </motion.div>
+
+          {/* Status text */}
+          <motion.div
+            className="mt-6 sm:mt-8 h-4 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={statusText}
+                className="block text-[10px] sm:text-xs tracking-[0.2em] text-muted-foreground/60 uppercase font-light"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+              >
+                {statusText}
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Skip hint */}
+          <motion.p
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground/40 text-[10px] tracking-widest uppercase"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 0.4 }}
+          >
+            tap to skip
+          </motion.p>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 };
 
