@@ -113,11 +113,89 @@
     --sidebar-ring: 202 74% 46%;
   }
 
-  /* No dark mode - removed entirely */
+  .dark {
+    /* ============================================
+       Modern Dark Mode Palette
+       ============================================ */
+
+    /* Background: Rich near-black (not pure black) */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+
+    /* Primary: Same blue but slightly adjusted for dark mode if needed */
+    --primary: 202 74% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Darker gray for contrast */
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    /* Card: Slightly lighter than background */
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+
+    /* Passive card tokens */
+    --card-passive: 240 10% 6%;
+    --card-passive-foreground: 0 0% 98%;
+
+    --popover: 240 10% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 202 96% 75%;
+    --accent-foreground: 0 0% 14%;
+
+    --accent-sky: 202 96% 75%;
+    --accent-salmon: 17 82% 67%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 202 74% 46%;
+
+    --shadow-soft: 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+    --shadow-medium: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+    --shadow-elevated: 0 16px 40px -12px rgba(0, 0, 0, 0.8);
+
+    --sidebar-background: 240 10% 4%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 202 74% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 202 74% 46%;
+  }
+
   .theme {
     --animate-meteor: meteor 5s linear infinite;
     --animate-shiny-text: shiny-text 8s infinite;
   }
+}
+
+/* View Transition Styles for Telegram-like effect */
+::view-transition-group(root) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-new(root),
+::view-transition-old(root) {
+  /* Prevent default cross-fade */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Always put the new view on top so it can expand over the old one */
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
 }
 
 @layer base {

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Home, Menu, X } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavigationProps {
   showPhotographyLink?: boolean;
@@ -95,8 +96,8 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
       >
         <motion.div
           className={`flex items-center gap-1 px-2 py-2 rounded-full border border-border shadow-soft transition-all duration-300 ${isScrolled
-              ? 'bg-card/98 backdrop-blur-xl shadow-medium'
-              : 'bg-card/90 backdrop-blur-md'
+            ? 'bg-card/98 backdrop-blur-xl shadow-medium'
+            : 'bg-card/90 backdrop-blur-md'
             }`}
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
@@ -181,13 +182,19 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
               </Link>
             </motion.div>
           )}
+
+          {/* Theme Toggle - Desktop */}
+          <div className="ml-1">
+            <ThemeToggle />
+          </div>
         </motion.div>
-      </motion.nav>
+      </motion.nav >
 
       {/* Mobile Navigation */}
-      <motion.nav
+      < motion.nav
         className="fixed top-3 left-3 right-3 z-50 md:hidden"
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }
+        }
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
@@ -208,6 +215,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
               <Link
                 to="/photography"
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Photography"
               >
                 <Camera className="w-4 h-4" />
               </Link>
@@ -215,10 +223,14 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
               <Link
                 to="/"
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Home"
               >
                 <Home className="w-4 h-4" />
               </Link>
             )}
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Menu Button - Only show on home page */}
             {isHome && (
@@ -251,8 +263,8 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, index)}
                     className={`block px-4 py-3 font-body text-sm tracking-wider transition-colors ${activeIndex === index
-                        ? 'text-primary bg-primary/5 font-medium'
-                        : 'text-muted-foreground hover:text-primary hover:bg-secondary'
+                      ? 'text-primary bg-primary/5 font-medium'
+                      : 'text-muted-foreground hover:text-primary hover:bg-secondary'
                       }`}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -275,7 +287,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.nav>
+      </motion.nav >
     </>
   );
 };
