@@ -9,6 +9,7 @@ A comprehensive personal portfolio showcasing expertise in **Validator Node Oper
 -   **Interactive Hero Section**: Immersive entrance with particle effects, parallax scrolling, and a custom "Lanyard" identity card.
 -   **Experience Timeline**: A unique horizontal scrolling interface powered by **GSAP** to visualize professional journey and milestones.
 -   **Visual Gallery**: A photography section featuring "Visual Stories" with star-bordered cards and shiny reflective text effects.
+-   **SEO Optimized**: Fully optimized with Next.js App Router for maximum search engine visibility (Sitemap, Robots, OpenGraph).
 -   **Dynamic Visualizations**:
     -   **Offline Events**: Custom `FloatingLines` canvas animation representing network density.
     -   **Skills**: Interactive `MagicBento` grid for core and supporting skills.
@@ -18,12 +19,13 @@ A comprehensive personal portfolio showcasing expertise in **Validator Node Oper
 
 Built with modern web technologies for performance and visual fidelity:
 
--   **Framework**: [React](https://react.dev/) + [Vite](https://vitejs.dev/)
+-   **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 -   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 -   **Animations**:
     -   [Framer Motion](https://www.framer.com/motion/) (Layout & Micro-interactions)
     -   [GSAP](https://gsap.com/) & ScrollTrigger (Complex scroll sequences)
 -   **UI Components**: `shadcn/ui`, `@react-bits`, and custom canvas implementations.
+-   **Deployment**: Vercel + Cloudflare (CDN/WAF)
 
 ## 🚀 Getting Started
 
@@ -32,7 +34,7 @@ To run this project locally:
 1.  **Clone the repository**
     ```bash
     git clone https://github.com/tomirahman/tomirahman.github.io.git
-    cd tomirahman.github.io
+    cd tomirahman.github.io/portfolio
     ```
 
 2.  **Install dependencies**
@@ -48,11 +50,13 @@ To run this project locally:
 4.  **Build for production**
     ```bash
     npm run build
+    npm start
     ```
 
 ## 🌐 Deploy
 
-This project is optimized for deployment on **GitHub Pages** or **Vercel**.
+This project is optimized for deployment on **Vercel**.
+Access the live site at: **[tomi.my.id](https://tomi.my.id)**
 
 ---
 *© 2026 Tomi Rahman. All Rights Reserved.*
