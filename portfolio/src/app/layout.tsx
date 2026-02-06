@@ -9,10 +9,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     metadataBase: new URL("https://tomi.my.id"),
     title: {
-        default: "Tomi Rahman | Web3 Infrastructure Operator",
+        default: "Tomi Rahman | Web3 Infrastructure Operator & Node Validator",
         template: "%s | Tomi Rahman"
     },
-    description: "Personal portfolio of Tomi Rahman. Web3 Infrastructure Operator, Community Builder, and Node Validator. Focusing on decentralized networks and ecosystem growth.",
+    description: "Experienced Web3 Infrastructure Operator & Community Builder. Specializing in decentralized networks, node validation, and driving ecosystem growth.",
     keywords: ["Web3", "Node Operator", "Community Manager", "Blockchain", "Manta Network", "Validator", "Portfolio"],
     authors: [{ name: "Tomi Rahman", url: "https://tomi.my.id" }],
     creator: "Tomi Rahman",
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
         locale: "en_US",
         url: "https://tomi.my.id",
         siteName: "Tomi Rahman Portfolio",
-        title: "Tomi Rahman | Web3 Infrastructure Operator",
-        description: "Web3 Infrastructure Operator, Community Builder, and Node Validator. Focusing on decentralized networks and ecosystem growth.",
+        title: "Tomi Rahman | Web3 Infrastructure Operator & Node Validator",
+        description: "Experienced Web3 Infrastructure Operator & Community Builder. Specializing in decentralized networks, node validation, and driving ecosystem growth.",
         images: [
             {
                 url: "/og-image.png",
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Tomi Rahman | Web3 Infrastructure Operator",
-        description: "Web3 Infrastructure Operator, Community Builder, and Node Validator.",
+        title: "Tomi Rahman | Web3 Infrastructure Operator & Node Validator",
+        description: "Experienced Web3 Infrastructure Operator & Community Builder. Specializing in decentralized networks, node validation, and driving ecosystem growth.",
         creator: "@tomi_r25",
         images: ["/og-image.png"],
     },
