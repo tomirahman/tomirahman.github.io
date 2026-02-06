@@ -1,4 +1,7 @@
+"use client";
+
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { animate, stagger } from 'animejs';
 
 interface MasonryProps {
@@ -141,11 +144,12 @@ const Masonry = ({ data, columns = 3, gap = 12 }: MasonryProps) => {
                     onMouseEnter={() => handleMouseEnter(item.id, index)}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <img
+                    <Image
                         src={item.image}
                         alt={`Gallery image ${item.id}`}
-                        className="w-full h-full object-cover transition-[filter] duration-300"
-                        loading="lazy"
+                        className="object-cover transition-[filter] duration-300"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
                     />
 
                     {/* Hover overlay with gradient */}
@@ -157,8 +161,8 @@ const Masonry = ({ data, columns = 3, gap = 12 }: MasonryProps) => {
                     {/* Hover border glow effect */}
                     <div
                         className={`absolute inset-0 rounded-lg transition-all duration-300 ${hoveredId === item.id
-                                ? 'ring-2 ring-primary/50 shadow-lg shadow-primary/20'
-                                : ''
+                            ? 'ring-2 ring-primary/50 shadow-lg shadow-primary/20'
+                            : ''
                             }`}
                     />
                 </div>

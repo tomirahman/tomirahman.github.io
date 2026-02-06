@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-const STORAGE_URL = import.meta.env.VITE_SUPABASE_URL
-  ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/assets`
+const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets`
   : "https://[YOUR_PROJECT_ID].supabase.co/storage/v1/object/public/assets";
 
 const cartoonAvatar = `${STORAGE_URL}/logos/cartoon-avatar.png`; // Placing in logos folder for simplicity based on upload list instructions or update upload list to match

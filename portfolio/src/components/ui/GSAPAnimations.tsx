@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useTransform, useSpring, Variants } from "framer-motion";
 import { ReactNode, useRef } from "react";
 import { useSectionScroll, splitTextToChars, splitTextToWords } from "@/hooks/useGSAPAnimations";
@@ -15,17 +17,17 @@ interface TextRevealProps {
 }
 
 // Character-by-character reveal (like GSAP SplitText)
-export const TextReveal = ({ 
-  children, 
-  className = "", 
+export const TextReveal = ({
+  children,
+  className = "",
   delay = 0,
   type = "chars",
   staggerDelay = 0.02
 }: TextRevealProps) => {
   const items = type === "chars" ? splitTextToChars(children) : splitTextToWords(children);
-  
+
   return (
-    <motion.span 
+    <motion.span
       className={`inline-flex flex-wrap ${className}`}
       initial="hidden"
       whileInView="visible"
@@ -41,8 +43,8 @@ export const TextReveal = ({
             className="inline-block"
             variants={{
               hidden: { y: "100%", opacity: 0 },
-              visible: { 
-                y: 0, 
+              visible: {
+                y: 0,
                 opacity: 1,
                 transition: {
                   duration: 0.5,
@@ -73,10 +75,10 @@ export const MaskReveal = ({ children, className = "", delay = 0 }: MaskRevealPr
       initial={{ y: "100%" }}
       whileInView={{ y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ 
-        duration: 0.8, 
+      transition={{
+        duration: 0.8,
         delay,
-        ease: [0.22, 1, 0.36, 1] 
+        ease: [0.22, 1, 0.36, 1]
       }}
     >
       {children}
@@ -91,10 +93,10 @@ export const ClipReveal = ({ children, className = "", delay = 0 }: MaskRevealPr
     initial={{ clipPath: "inset(100% 0 0 0)" }}
     whileInView={{ clipPath: "inset(0% 0 0 0)" }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ 
-      duration: 1, 
+    transition={{
+      duration: 1,
       delay,
-      ease: [0.22, 1, 0.36, 1] 
+      ease: [0.22, 1, 0.36, 1]
     }}
   >
     {children}
@@ -112,9 +114,9 @@ interface ScrollFadeProps {
   distance?: number;
 }
 
-export const ScrollFade = ({ 
-  children, 
-  className = "", 
+export const ScrollFade = ({
+  children,
+  className = "",
   direction = "up",
   distance = 60
 }: ScrollFadeProps) => {
@@ -133,7 +135,7 @@ export const ScrollFade = ({
       initial={{ opacity: 0, ...getInitialPosition() }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
-      transition={{ 
+      transition={{
         duration: 0.8,
         ease: [0.22, 1, 0.36, 1]
       }}
@@ -177,9 +179,9 @@ interface StaggerRevealProps {
   containerDelay?: number;
 }
 
-export const StaggerReveal = ({ 
-  children, 
-  className = "", 
+export const StaggerReveal = ({
+  children,
+  className = "",
   staggerDelay = 0.1,
   containerDelay = 0
 }: StaggerRevealProps) => {
@@ -196,8 +198,8 @@ export const StaggerReveal = ({
 
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 40 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
@@ -312,13 +314,13 @@ export const LineDraw = ({ className = "", direction = "horizontal", delay = 0 }
     initial={{ scaleX: direction === "horizontal" ? 0 : 1, scaleY: direction === "vertical" ? 0 : 1 }}
     whileInView={{ scaleX: 1, scaleY: 1 }}
     viewport={{ once: true }}
-    transition={{ 
-      duration: 1, 
+    transition={{
+      duration: 1,
       delay,
-      ease: [0.22, 1, 0.36, 1] 
+      ease: [0.22, 1, 0.36, 1]
     }}
-    style={{ 
-      transformOrigin: direction === "horizontal" ? "left" : "top" 
+    style={{
+      transformOrigin: direction === "horizontal" ? "left" : "top"
     }}
   />
 );
@@ -340,10 +342,10 @@ export const RotateIn = ({ children, className = "", delay = 0, rotation = 10 }:
     initial={{ opacity: 0, rotate: rotation, y: 30 }}
     whileInView={{ opacity: 1, rotate: 0, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ 
-      duration: 0.8, 
+    transition={{
+      duration: 0.8,
       delay,
-      ease: [0.22, 1, 0.36, 1] 
+      ease: [0.22, 1, 0.36, 1]
     }}
   >
     {children}
@@ -366,10 +368,10 @@ export const ScaleReveal = ({ children, className = "", delay = 0 }: ScaleReveal
     initial={{ opacity: 0, scale: 0.8 }}
     whileInView={{ opacity: 1, scale: 1 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ 
-      duration: 0.6, 
+    transition={{
+      duration: 0.6,
       delay,
-      ease: [0.22, 1, 0.36, 1] 
+      ease: [0.22, 1, 0.36, 1]
     }}
   >
     {children}
@@ -392,10 +394,10 @@ export const BlurReveal = ({ children, className = "", delay = 0 }: BlurRevealPr
     initial={{ opacity: 0, filter: "blur(10px)" }}
     whileInView={{ opacity: 1, filter: "blur(0px)" }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ 
-      duration: 0.8, 
+    transition={{
+      duration: 0.8,
       delay,
-      ease: [0.22, 1, 0.36, 1] 
+      ease: [0.22, 1, 0.36, 1]
     }}
   >
     {children}

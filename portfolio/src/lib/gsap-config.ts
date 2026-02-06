@@ -2,7 +2,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 // Common easing presets
 export const easings = {

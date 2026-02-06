@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -141,6 +143,7 @@ const IntroScreen = ({ onComplete }: IntroScreenProps) => {
     sessionStorage.setItem("hasSeenIntro", "true");
     setPercentage(100);
     setStatusText("ALMOST READY...");
+    window.scrollTo(0, 0);
     setTimeout(() => {
       setIsComplete(true);
     }, 200);

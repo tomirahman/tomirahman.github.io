@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useEffect, useCallback, useState, ReactNode } from 'react';
 import { gsap } from 'gsap';
 import './MagicBento.css';

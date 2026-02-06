@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import HeroBackground from "./hero/HeroBackground";

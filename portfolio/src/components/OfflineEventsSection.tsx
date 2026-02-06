@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Calendar, MapPin } from "lucide-react";
@@ -12,8 +14,8 @@ import FloatingLines from "./ui/floating-lines";
 
 // Import event photos
 // Replaced with Supabase Storage URLs
-const STORAGE_URL = import.meta.env.VITE_SUPABASE_URL
-  ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/assets`
+const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets`
   : "https://[YOUR_PROJECT_ID].supabase.co/storage/v1/object/public/assets";
 
 const coinfest1 = `${STORAGE_URL}/events/coinfest-1.jpg`;

@@ -1,5 +1,9 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Home, Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -9,10 +13,10 @@ interface NavigationProps {
 }
 
 const navLinks = [
-  { href: "#about-section", label: "ABOUT" },
-  { href: "#skills", label: "SKILLS" },
-  { href: "#experience", label: "EXP" },
-  { href: "#events", label: "EVENTS" },
+  { href: "/#about-section", label: "ABOUT" },
+  { href: "/#skills", label: "SKILLS" },
+  { href: "/#experience", label: "EXP" },
+  { href: "/#events", label: "EVENTS" },
 ];
 
 /**
@@ -20,8 +24,8 @@ const navLinks = [
  * Features sliding background that follows hover/active state
  */
 const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
-  const location = useLocation();
-  const isHome = location.pathname === "/";
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -74,15 +78,18 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
   }, [hoveredIndex, activeIndex]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, index: number) => {
-    if (isHome && href.startsWith("#")) {
+    // If we are on home page and clicking a hash link
+    if (isHome && href.includes("#")) {
       e.preventDefault();
-      const element = document.querySelector(href);
+      const hash = href.split("#")[1];
+      const element = document.getElementById(hash);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
         setActiveIndex(index);
       }
       setIsMobileMenuOpen(false);
     }
+    // If not on home page, Link will handle navigation to "/#section" naturally
   };
 
   return (
@@ -104,7 +111,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
         >
           {/* Logo/Brand */}
           <Link
-            to="/"
+            href="/"
             className="px-4 py-2 font-display text-sm font-bold text-foreground hover:text-primary transition-colors"
           >
             TOMI<span className="text-primary">R</span>
@@ -134,7 +141,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
               />
 
               {navLinks.map((link, index) => (
-                <motion.a
+                <Link
                   key={link.href}
                   ref={(el) => { itemRefs.current[index] = el; }}
                   href={link.href}
@@ -148,12 +155,9 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
                       : 'text-muted-foreground hover:text-foreground'
                     }
                   `}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
                 >
                   {link.label}
-                </motion.a>
+                </Link>
               ))}
 
               <div className="w-px h-6 bg-border ml-1" />
@@ -164,7 +168,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
           {showPhotographyLink ? (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
-                to="/photography"
+                href="/photography"
                 className="flex items-center gap-2 px-3 lg:px-4 py-2 font-body text-xs tracking-wider text-muted-foreground hover:text-primary hover:bg-secondary rounded-full transition-all"
               >
                 <Camera className="w-3.5 h-3.5" />
@@ -174,7 +178,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
           ) : (
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
-                to="/"
+                href="/"
                 className="flex items-center gap-2 px-3 lg:px-4 py-2 font-body text-xs tracking-wider text-muted-foreground hover:text-primary hover:bg-secondary rounded-full transition-all"
               >
                 <Home className="w-3.5 h-3.5" />
@@ -202,7 +206,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
           }`}>
           {/* Logo/Brand */}
           <Link
-            to="/"
+            href="/"
             className="px-2 py-1 font-display text-sm font-bold text-foreground"
           >
             TOMI<span className="text-primary">R</span>
@@ -213,7 +217,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
             {/* Photography/Home Link - Icon only on mobile */}
             {showPhotographyLink ? (
               <Link
-                to="/photography"
+                href="/photography"
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
                 aria-label="Photography"
               >
@@ -221,7 +225,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
               </Link>
             ) : (
               <Link
-                to="/"
+                href="/"
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
                 aria-label="Home"
               >
@@ -258,7 +262,7 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
             >
               <div className="py-2">
                 {navLinks.map((link, index) => (
-                  <motion.a
+                  <Link
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href, index)}
@@ -266,18 +270,15 @@ const Navigation = ({ showPhotographyLink = true }: NavigationProps) => {
                       ? 'text-primary bg-primary/5 font-medium'
                       : 'text-muted-foreground hover:text-primary hover:bg-secondary'
                       }`}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2, delay: index * 0.05 }}
                   >
                     {link.label}
-                  </motion.a>
+                  </Link>
                 ))}
                 {/* Photography link in mobile menu */}
                 {showPhotographyLink && (
                   <Link
-                    to="/photography"
-                    className="flex items-center gap-2 px-4 py-3 font-body text-sm tracking-wider text-muted-foreground hover:text-primary hover:bg-secondary transition-colors"
+                    href="/photography"
+                    className="flex items-center gap-2 px-4 py-3 font-body text-xs tracking-wider text-muted-foreground hover:text-primary hover:bg-secondary transition-colors"
                   >
                     <Camera className="w-4 h-4" />
                     PHOTOS

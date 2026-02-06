@@ -1,10 +1,12 @@
-import React, { 
-  Children, 
-  cloneElement, 
-  forwardRef, 
-  isValidElement, 
-  useEffect, 
-  useMemo, 
+"use client";
+
+import React, {
+  Children,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  useEffect,
+  useMemo,
   useRef,
   ReactNode,
   CSSProperties,
@@ -18,10 +20,10 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, className, ...rest }, ref) => (
-  <div 
-    ref={ref} 
-    {...rest} 
-    className={`card-swap-item ${customClass ?? ''} ${className ?? ''}`.trim()} 
+  <div
+    ref={ref}
+    {...rest}
+    className={`card-swap-item ${customClass ?? ''} ${className ?? ''}`.trim()}
   />
 ));
 Card.displayName = 'Card';
@@ -82,24 +84,24 @@ const CardSwap = ({
   easing = 'elastic',
   children
 }: CardSwapProps) => {
-  const config: EasingConfig = useMemo(() => 
+  const config: EasingConfig = useMemo(() =>
     easing === 'elastic'
       ? {
-          ease: 'elastic.out(0.6,0.9)',
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
-          promoteOverlap: 0.9,
-          returnDelay: 0.05
-        }
+        ease: 'elastic.out(0.6,0.9)',
+        durDrop: 2,
+        durMove: 2,
+        durReturn: 2,
+        promoteOverlap: 0.9,
+        returnDelay: 0.05
+      }
       : {
-          ease: 'power1.inOut',
-          durDrop: 0.8,
-          durMove: 0.8,
-          durReturn: 0.8,
-          promoteOverlap: 0.45,
-          returnDelay: 0.2
-        },
+        ease: 'power1.inOut',
+        durDrop: 0.8,
+        durMove: 0.8,
+        durReturn: 0.8,
+        promoteOverlap: 0.45,
+        returnDelay: 0.2
+      },
     [easing]
   );
 
@@ -208,14 +210,14 @@ const CardSwap = ({
   const rendered = childArr.map((child, i) =>
     isValidElement(child)
       ? cloneElement(child as React.ReactElement<any>, {
-          key: i,
-          ref: refs[i],
-          style: { width, height, ...(child.props.style ?? {}) } as CSSProperties,
-          onClick: (e: ReactMouseEvent<HTMLElement>) => {
-            (child.props as any).onClick?.(e);
-            onCardClick?.(i);
-          }
-        })
+        key: i,
+        ref: refs[i],
+        style: { width, height, ...(child.props.style ?? {}) } as CSSProperties,
+        onClick: (e: ReactMouseEvent<HTMLElement>) => {
+          (child.props as any).onClick?.(e);
+          onCardClick?.(i);
+        }
+      })
       : child
   );
 

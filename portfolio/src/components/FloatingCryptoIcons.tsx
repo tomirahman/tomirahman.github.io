@@ -1,5 +1,8 @@
+"use client";
+
 import { motion, useReducedMotion } from "framer-motion";
 import { useMemo } from "react";
+import Image from "next/image";
 
 // Import all crypto icons
 import bnbIcon from "@/assets/icons/bnb.svg";
@@ -24,13 +27,13 @@ interface FloatingIconProps {
   opacity: number;
 }
 
-const FloatingIcon = ({ 
-  src, 
-  alt, 
-  position, 
-  floatY, 
-  floatX, 
-  duration, 
+const FloatingIcon = ({
+  src,
+  alt,
+  position,
+  floatY,
+  floatX,
+  duration,
   delay,
   size,
   opacity
@@ -46,8 +49,8 @@ const FloatingIcon = ({
         height: size,
       }}
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ 
-        opacity: opacity, 
+      animate={{
+        opacity: opacity,
         scale: 1,
         x: prefersReducedMotion ? 0 : [0, floatX, 0],
         y: prefersReducedMotion ? 0 : [0, floatY, 0],
@@ -71,12 +74,12 @@ const FloatingIcon = ({
         },
       }}
     >
-      <img
+      <Image
         src={src}
         alt={alt}
         className="w-full h-full object-contain"
-        loading="lazy"
-        decoding="async"
+        fill
+        sizes="(max-width: 768px) 100vw, 100px" // Estimate size
       />
     </motion.div>
   );
@@ -164,7 +167,7 @@ const FloatingCryptoIcons = ({ section }: FloatingCryptoIconsProps) => {
 
   const icons = useMemo(() => {
     const config = sectionConfigs[section] || sectionConfigs.about;
-    
+
     return config.iconIndices.map((iconIndex, i) => {
       const icon = allIcons[iconIndex];
       return {

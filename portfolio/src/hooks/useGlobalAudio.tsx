@@ -24,7 +24,8 @@ let interactionListenersAttached = false;
 let isPausedForVideo = false;
 let volumeBeforePause = 0;
 
-function getOrCreateAudioElement(): HTMLAudioElement {
+function getOrCreateAudioElement(): HTMLAudioElement | null {
+  if (typeof window === 'undefined') return null;
   let el = document.getElementById(AUDIO_ELEMENT_ID) as HTMLAudioElement | null;
   if (!el) {
     el = document.createElement("audio");
@@ -65,6 +66,7 @@ function fadeVolume(
 
 async function switchTrack(route: AudioRoute): Promise<void> {
   const audio = getOrCreateAudioElement();
+  if (!audio) return;
   const config = AUDIO_CONFIG[route];
 
   // If same route and already playing, do nothing
@@ -110,6 +112,7 @@ function setupInteractionListeners(route: AudioRoute): void {
     hasUserInteracted = true;
 
     const audio = getOrCreateAudioElement();
+    if (!audio) return;
     const config = AUDIO_CONFIG[currentRoute || route];
 
     if (audio.paused && !isPausedForVideo) {
@@ -132,7 +135,7 @@ function setupInteractionListeners(route: AudioRoute): void {
 // Pause background music for video playback
 export async function pauseBackgroundMusic(): Promise<void> {
   const audio = getOrCreateAudioElement();
-  if (!audio.paused) {
+  if (audio && !audio.paused) {
     isPausedForVideo = true;
     volumeBeforePause = audio.volume;
     await fadeVolume(audio, 0, 300);
@@ -143,7 +146,7 @@ export async function pauseBackgroundMusic(): Promise<void> {
 // Resume background music after video closes
 export async function resumeBackgroundMusic(): Promise<void> {
   const audio = getOrCreateAudioElement();
-  if (isPausedForVideo && hasUserInteracted && currentRoute) {
+  if (audio && isPausedForVideo && hasUserInteracted && currentRoute) {
     isPausedForVideo = false;
     const config = AUDIO_CONFIG[currentRoute];
     try {
@@ -165,8 +168,9 @@ export function useGlobalAudio(route: AudioRoute) {
 
     // Preload audio
     const audio = getOrCreateAudioElement();
+    if (!audio) return;
     const config = AUDIO_CONFIG[route];
-    
+
     if (!audio.src.endsWith(config.src)) {
       audio.src = config.src;
       audio.load();
@@ -186,6 +190,7 @@ export function useGlobalAudio(route: AudioRoute) {
 
   const toggleAudio = useCallback(async () => {
     const audio = getOrCreateAudioElement();
+    if (!audio) return false;
     const config = AUDIO_CONFIG[route];
 
     hasUserInteracted = true;
@@ -211,9 +216,12 @@ export function useGlobalAudio(route: AudioRoute) {
 }
 
 export function useAudioState() {
+  if (typeof window === 'undefined') {
+    return { isPlaying: false, hasInteracted: false };
+  }
   const audio = getOrCreateAudioElement();
   return {
-    isPlaying: !audio.paused,
+    isPlaying: audio ? !audio.paused : false,
     hasInteracted: hasUserInteracted,
   };
 }

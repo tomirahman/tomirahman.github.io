@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useCallback, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { pauseBackgroundMusic, resumeBackgroundMusic } from "@/hooks/useGlobalAudio";
@@ -61,15 +64,15 @@ const CinematicViewer = ({
   // Navigation with animation lock
   const navigate = useCallback((direction: "next" | "prev") => {
     if (isAnimating || items.length <= 1) return;
-    
+
     setIsAnimating(true);
-    
+
     const newIndex = direction === "next"
       ? (currentIndex + 1) % items.length
       : (currentIndex - 1 + items.length) % items.length;
-    
+
     onNavigate(newIndex);
-    
+
     // Animation lock release
     setTimeout(() => setIsAnimating(false), ANIMATION_DURATION * 1000 + 50);
   }, [currentIndex, items.length, onNavigate, isAnimating]);
@@ -103,7 +106,7 @@ const CinematicViewer = ({
     } else {
       // For photos, keep background music
     }
-    
+
     return () => {
       if (isVideo) {
         resumeBackgroundMusic();
@@ -157,7 +160,7 @@ const CinematicViewer = ({
 
       // Minimum 40px swipe distance
       if (Math.abs(diffX) < 40) return;
-      
+
       // Ignore diagonal gestures (ratio check)
       if (Math.abs(diffY) > Math.abs(diffX) * 0.5) return;
 
@@ -207,10 +210,12 @@ const CinematicViewer = ({
       );
     }
     return (
-      <img
+      <Image
         src={item.src}
         alt={item.alt || ""}
-        className="w-full h-full object-contain"
+        className="object-contain"
+        fill
+        sizes="80vw"
         draggable={false}
       />
     );
@@ -298,7 +303,7 @@ const CinematicViewer = ({
                   ease: [0.22, 0.61, 0.36, 1],
                 }}
                 className="absolute w-[70vw] h-[70vh] md:w-[60vw] md:h-[75vh] flex items-center justify-center"
-                style={{ 
+                style={{
                   transformOrigin: "center center",
                   pointerEvents: isActiveItem ? "auto" : "none",
                 }}
@@ -306,10 +311,10 @@ const CinematicViewer = ({
               >
                 <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden">
                   {renderMedia(item, isActiveItem)}
-                  
+
                   {/* Video play overlay */}
                   {isActiveItem && isVideo && !isPlaying && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -328,7 +333,7 @@ const CinematicViewer = ({
       </div>
 
       {/* Bottom info panel */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
@@ -375,23 +380,22 @@ const CinematicViewer = ({
               )}
             </motion.div>
           </AnimatePresence>
-          
+
           {/* Progress dots */}
           <div className="flex justify-center gap-1.5 mt-4">
             {items.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => !isAnimating && onNavigate(idx)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  idx === currentIndex 
-                    ? "bg-white w-6" 
-                    : "bg-white/40 hover:bg-white/60 w-2"
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex
+                  ? "bg-white w-6"
+                  : "bg-white/40 hover:bg-white/60 w-2"
+                  }`}
                 aria-label={`Go to item ${idx + 1}`}
               />
             ))}
           </div>
-          
+
           {/* Counter */}
           <p className="text-white/50 text-xs mt-3">
             {currentIndex + 1} / {items.length}
