@@ -16,7 +16,7 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 const STORAGE_URL = SUPABASE_URL
     ? `${SUPABASE_URL}/storage/v1/object/public/assets`
-    : "https://[YOUR_PROJECT_ID].supabase.co/storage/v1/object/public/assets";
+    : "https://uzijgqhludhmqoqfqbzo.supabase.co/storage/v1/object/public/assets";
 
 const photos = [
     { id: 1, src: `${STORAGE_URL}/photography/photo-1.jpg`, alt: "Island Boat Adventure", caption: "Nusa Penida Expedition", quote: "Adventure awaits those who dare to sail beyond the horizon." },

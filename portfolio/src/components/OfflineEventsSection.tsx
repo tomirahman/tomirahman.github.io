@@ -16,7 +16,7 @@ import FloatingLines from "./ui/floating-lines";
 // Replaced with Supabase Storage URLs
 const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
   ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets`
-  : "https://[YOUR_PROJECT_ID].supabase.co/storage/v1/object/public/assets";
+  : "https://uzijgqhludhmqoqfqbzo.supabase.co/storage/v1/object/public/assets";
 
 const coinfest1 = `${STORAGE_URL}/events/coinfest-1.jpg`;
 const coinfest2 = `${STORAGE_URL}/events/coinfest-2.jpg`;

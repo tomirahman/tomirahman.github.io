@@ -25,8 +25,8 @@ export const metadata: Metadata = {
         description: "Experienced Web3 Infrastructure Operator & Community Builder. Specializing in decentralized networks, node validation, and driving ecosystem growth.",
         images: [
             {
-                url: "/og-image.jpg",
-                width: 1200,
+                url: "/og-image.png",
+                width: 424,
                 height: 630,
                 alt: "Tomi Rahman - Web3 Portfolio"
             }
@@ -37,7 +37,12 @@ export const metadata: Metadata = {
         title: "Tomi Rahman | Web3 Infrastructure Operator & Node Validator",
         description: "Experienced Web3 Infrastructure Operator & Community Builder. Specializing in decentralized networks, node validation, and driving ecosystem growth.",
         creator: "@tomi_r25",
-        images: ["/og-image.jpg"],
+        images: ["/og-image.png"],
+    },
+    icons: {
+        icon: "/favicon.png",
+        shortcut: "/favicon.png",
+        apple: "/favicon.png",
     },
     robots: {
         index: true,
