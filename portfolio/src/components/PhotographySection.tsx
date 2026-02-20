@@ -1,4 +1,3 @@
-"use client";
 
 import { useRef, useEffect } from "react";
 import gsap from "@/lib/gsap-config";
@@ -6,7 +5,6 @@ import { ScrollTrigger } from "@/lib/gsap-config";
 import { AnimatedShinyText } from "./ui/animated-shiny-text";
 import StarBorder from "./ui/star-border";
 import { Camera } from "lucide-react";
-import Image from "next/image";
 
 interface Photo {
     id: number | string;
@@ -179,12 +177,11 @@ const PhotographySection = ({ photos, onPhotoClick }: PhotographySectionProps) =
                                         speed="3s"
                                     >
                                         <div className="w-full h-full bg-card rounded-xl overflow-hidden">
-                                            <Image
+                                            <img
                                                 src={photo.src}
                                                 alt={photo.alt}
-                                                fill
-                                                sizes="(max-width: 768px) 300px, 400px"
-                                                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                                loading="lazy"
                                             />
                                         </div>
                                     </StarBorder>

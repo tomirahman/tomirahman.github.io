@@ -1,7 +1,5 @@
-"use client";
 
 import { useRef, useState, useLayoutEffect } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -16,9 +14,7 @@ import tether from "@/assets/icons/tether.png";
 import tron from "@/assets/icons/tron.png";
 
 // Register GSAP plugins
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 export default function IconAnimation() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -301,7 +297,7 @@ export default function IconAnimation() {
                     style={{ left: '50%', top: '50%', x: '-50%', y: '-50%' }}
                 >
                     <div ref={(el) => { iconsRef.current[index + 1] = el; }}>
-                        <Image
+                        <img
                             src={iconData.src}
                             alt={iconData.name}
                             className="w-10 h-10 md:w-14 md:h-14 opacity-90"

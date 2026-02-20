@@ -1,7 +1,5 @@
-"use client";
 
 import { useEffect, useCallback, useRef, useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { pauseBackgroundMusic, resumeBackgroundMusic } from "@/hooks/useGlobalAudio";
@@ -210,12 +208,10 @@ const CinematicViewer = ({
       );
     }
     return (
-      <Image
+      <img
         src={item.src}
         alt={item.alt || ""}
-        className="object-contain"
-        fill
-        sizes="80vw"
+        className="w-full h-full object-contain"
         draggable={false}
       />
     );

@@ -1,0 +1,437 @@
+/* Fonts loaded via index.html with non-blocking preload */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  @keyframes star-movement-bottom {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translate(-100%, 0%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes star-movement-top {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translate(100%, 0%);
+      opacity: 0;
+    }
+  }
+
+  .animate-star-movement-bottom {
+    animation: star-movement-bottom linear infinite alternate;
+  }
+
+  .animate-star-movement-top {
+    animation: star-movement-top linear infinite alternate;
+  }
+}
+
+@layer base {
+  :root {
+    /* ============================================
+       ANTIQUE WHITE COLOR PALETTE (LIGHT ONLY)
+       No dark mode - single consistent theme
+       ============================================ */
+
+    /* Primary Background - Antique White #FAEAD1 = 34 70% 90% */
+    --background: 34 70% 90%;
+    --foreground: 0 0% 14%;
+    /* Raisin Black #232323 */
+
+    /* Primary Blue (for links/active) - #208ECB = 202 74% 46% */
+    --primary: 202 74% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Slightly darker antique white for contrast */
+    --secondary: 34 40% 85%;
+    --secondary-foreground: 0 0% 14%;
+
+    /* Card - White with warmth */
+    --card: 34 50% 96%;
+    --card-foreground: 0 0% 14%;
+
+    /* Passive card tokens */
+    --card-passive: 34 50% 96%;
+    --card-passive-foreground: 0 0% 14%;
+
+    --popover: 34 50% 96%;
+    --popover-foreground: 0 0% 14%;
+
+    /* Muted - Davy Gray / Web Gray */
+    --muted: 34 20% 92%;
+    --muted-foreground: 0 0% 31%;
+    /* #505156 */
+
+    /* Accent - Light Sky Blue #84CFFC = 202 96% 75% */
+    --accent: 202 96% 75%;
+    --accent-foreground: 0 0% 14%;
+
+    /* Accent Sky for shiny text */
+    --accent-sky: 202 96% 75%;
+
+    /* Accent Salmon - #F08967 = 17 82% 67% (for emphasis) */
+    --accent-salmon: 17 82% 67%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border - Light Gray #D0D3D3 = 180 2% 82% */
+    --border: 180 2% 82%;
+    --input: 180 2% 82%;
+    --ring: 202 74% 46%;
+
+    --radius: 0.75rem;
+
+    /* Shadows - soft, low elevation */
+    --shadow-soft: 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+    --shadow-elevated: 0 16px 40px -12px rgba(0, 0, 0, 0.12);
+
+    /* Typography */
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --sidebar-background: 34 70% 90%;
+    --sidebar-foreground: 0 0% 14%;
+    --sidebar-primary: 202 74% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 34 40% 85%;
+    --sidebar-accent-foreground: 0 0% 14%;
+    --sidebar-border: 180 2% 82%;
+    --sidebar-ring: 202 74% 46%;
+  }
+
+  .dark {
+    /* ============================================
+       Modern Dark Mode Palette
+       ============================================ */
+
+    /* Background: Rich near-black (not pure black) */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+
+    /* Primary: Same blue but slightly adjusted for dark mode if needed */
+    --primary: 202 74% 46%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Darker gray for contrast */
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    /* Card: Slightly lighter than background */
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+
+    /* Passive card tokens */
+    --card-passive: 240 10% 6%;
+    --card-passive-foreground: 0 0% 98%;
+
+    --popover: 240 10% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 202 96% 75%;
+    --accent-foreground: 0 0% 14%;
+
+    --accent-sky: 202 96% 75%;
+    --accent-salmon: 17 82% 67%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 202 74% 46%;
+
+    --shadow-soft: 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+    --shadow-medium: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+    --shadow-elevated: 0 16px 40px -12px rgba(0, 0, 0, 0.8);
+
+    --sidebar-background: 240 10% 4%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 202 74% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4% 16%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 4% 16%;
+    --sidebar-ring: 202 74% 46%;
+  }
+
+  .theme {
+    --animate-meteor: meteor 5s linear infinite;
+    --animate-shiny-text: shiny-text 8s infinite;
+  }
+}
+
+/* View Transition Styles for Telegram-like effect */
+::view-transition-group(root) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-new(root),
+::view-transition-old(root) {
+  /* Prevent default cross-fade */
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Always put the new view on top so it can expand over the old one */
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    /* Safe area support for notch devices */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+
+  /* Mobile-first typography with clamp() */
+  h1,
+  .heading-hero {
+    font-size: clamp(2rem, 8vw, 4.5rem);
+  }
+
+  h2,
+  .heading-section {
+    font-size: clamp(1.75rem, 6vw, 3.5rem);
+  }
+
+  h3,
+  .heading-subsection {
+    font-size: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  /* Uppercase headings get better letter-spacing for readability */
+  .tracking-display {
+    letter-spacing: 0.05em;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Soft scroll snap - proximity for smooth feel */
+    scroll-snap-type: y proximity;
+  }
+
+  /* Section snap alignment */
+  section {
+    scroll-snap-align: start;
+  }
+}
+
+/* Full-screen section utility */
+.section-fullscreen {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Dynamic viewport height utility classes */
+.min-h-svh {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.h-svh {
+  height: 100vh;
+  height: 100svh;
+}
+
+/* Giant watermark text utility */
+.watermark-text {
+  letter-spacing: 0.02em;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+/* Premium heading styles */
+.heading-premium {
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-xl;
+    background: hsl(var(--background) / 0.85);
+  }
+
+  /* Card variants */
+  .card-visual {
+    @apply bg-transparent border-border/30;
+  }
+
+  .card-standard {
+    @apply bg-card border-border;
+  }
+}
+
+@layer utilities {
+
+  /* Stagger delays */
+  .stagger-1 {
+    animation-delay: 80ms;
+  }
+
+  .stagger-2 {
+    animation-delay: 160ms;
+  }
+
+  .stagger-3 {
+    animation-delay: 240ms;
+  }
+
+  .stagger-4 {
+    animation-delay: 320ms;
+  }
+
+  .stagger-5 {
+    animation-delay: 400ms;
+  }
+
+  .stagger-6 {
+    animation-delay: 480ms;
+  }
+
+  @media (max-width: 767px) {
+    .stagger-1 {
+      animation-delay: 60ms;
+    }
+
+    .stagger-2 {
+      animation-delay: 120ms;
+    }
+
+    .stagger-3 {
+      animation-delay: 180ms;
+    }
+
+    .stagger-4 {
+      animation-delay: 240ms;
+    }
+
+    .stagger-5 {
+      animation-delay: 300ms;
+    }
+
+    .stagger-6 {
+      animation-delay: 360ms;
+    }
+  }
+
+  /* Card hover - scale 1.02 + soft shadow */
+  .card-interactive {
+    box-shadow: var(--shadow-soft);
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card-interactive:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-medium);
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .card-interactive:active {
+      background: hsl(var(--primary) / 0.05);
+      transition: background 120ms ease-out;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes meteor {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(var(--angle)) translateX(-500px);
+    opacity: 0;
+  }
+}
+
+@keyframes shiny-text {
+  0%,
+  90%,
+  100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+  }
+
+  30%,
+  60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+  }
+}

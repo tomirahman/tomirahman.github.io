@@ -1,7 +1,5 @@
-"use client";
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { animate, stagger } from 'animejs';
 
 interface MasonryProps {
@@ -144,12 +142,11 @@ const Masonry = ({ data, columns = 3, gap = 12 }: MasonryProps) => {
                     onMouseEnter={() => handleMouseEnter(item.id, index)}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <Image
+                    <img
                         src={item.image}
                         alt={`Gallery image ${item.id}`}
-                        className="object-cover transition-[filter] duration-300"
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="w-full h-full object-cover transition-[filter] duration-300"
+                        loading="lazy"
                     />
 
                     {/* Hover overlay with gradient */}

@@ -1,4 +1,3 @@
-"use client";
 
 import { useEffect, useRef, ReactNode } from 'react';
 import Lenis from '@studio-freight/lenis';

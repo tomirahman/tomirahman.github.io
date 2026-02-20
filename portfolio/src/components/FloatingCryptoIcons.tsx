@@ -1,8 +1,5 @@
-"use client";
-
 import { motion, useReducedMotion } from "framer-motion";
 import { useMemo } from "react";
-import Image from "next/image";
 
 // Import all crypto icons
 import bnbIcon from "@/assets/icons/bnb.svg";
@@ -74,12 +71,11 @@ const FloatingIcon = ({
         },
       }}
     >
-      <Image
+      <img
         src={src}
         alt={alt}
         className="w-full h-full object-contain"
-        fill
-        sizes="(max-width: 768px) 100vw, 100px" // Estimate size
+        loading="lazy"
       />
     </motion.div>
   );

@@ -1,17 +1,13 @@
-"use client";
-
 import { useRef, useEffect } from "react";
-import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import gsap from "@/lib/gsap-config";
 import { ScrollTrigger } from "@/lib/gsap-config";
 import { AnimatedShinyText } from "./ui/animated-shiny-text";
 
-// Import logos
-// Replaced with Supabase Storage URLs
-const STORAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/assets`
-  : "https://[YOUR_PROJECT_ID].supabase.co/storage/v1/object/public/assets";
+// Import logos from Supabase Storage
+const STORAGE_URL = import.meta.env.VITE_SUPABASE_URL
+  ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/assets`
+  : "https://uzijgqhludhmqoqfqbzo.supabase.co/storage/v1/object/public/assets";
 
 const mantaLogo = `${STORAGE_URL}/logos/manta.png`;
 const ssvLogo = `${STORAGE_URL}/logos/ssv.jpg`;
@@ -271,12 +267,11 @@ const ExperienceSection = () => {
                 {/* Logo and Role */}
                 <div className="flex items-start gap-4 mt-4 mb-4">
                   <div className="w-14 h-14 rounded-xl overflow-hidden border border-border/50 flex-shrink-0 shadow-sm">
-                    <Image
+                    <img
                       src={exp.logo}
                       alt={`${exp.company} logo`}
-                      className="object-cover"
-                      fill
-                      sizes="56px"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                   <div className="flex-1 min-w-0">

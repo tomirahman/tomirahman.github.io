@@ -1,13 +1,11 @@
-"use client";
-
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/ThemeProvider";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
     const { theme, setTheme, systemTheme } = useTheme();
-    // Mount state to avoid hydration mismatch
+    // Mount state to avoid flash
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -15,7 +13,6 @@ export function ThemeToggle() {
     }, []);
 
     const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
-        // If not mounted or view transitions not supported, just toggle
         if (!mounted || !document.startViewTransition) {
             setTheme(theme === "dark" ? "light" : "dark");
             return;
@@ -29,7 +26,6 @@ export function ThemeToggle() {
         );
 
         const transition = document.startViewTransition(() => {
-            // Resolve the effective theme to toggle
             const current = theme === "system" ? systemTheme : theme;
             const next = current === "dark" ? "light" : "dark";
             setTheme(next);
@@ -62,7 +58,6 @@ export function ThemeToggle() {
         )
     }
 
-    // Determine current icon
     const isDark = theme === "dark" || (theme === "system" && systemTheme === "dark");
 
     return (

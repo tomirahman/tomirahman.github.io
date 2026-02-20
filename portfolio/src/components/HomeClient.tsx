@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import IntroScreen from "@/components/IntroScreen";
@@ -28,14 +26,8 @@ export default function HomeClient() {
     const [introComplete, setIntroComplete] = useState(false);
     const [contentReady, setContentReady] = useState(false);
 
-    // Check if intro was already seen - Move to useEffect for Next.js hydration safety
-    const [hasSeenIntro, setHasSeenIntro] = useState(false);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setHasSeenIntro(!!sessionStorage.getItem("hasSeenIntro"));
-        }
-    }, []);
+    // Check if intro was already seen
+    const [hasSeenIntro] = useState(() => !!sessionStorage.getItem("hasSeenIntro"));
 
     // Initialize global audio for home page
     useGlobalAudio("home");
@@ -43,37 +35,28 @@ export default function HomeClient() {
     const handleIntroComplete = useCallback(() => {
         window.scrollTo(0, 0);
         setIntroComplete(true);
-        // sessionStorage is set inside IntroScreen typically, or we can set it here
     }, []);
 
-    // Aggressive scroll management
+    // Scroll management
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            // 1. Disable browser's native scroll restoration
-            window.history.scrollRestoration = 'manual';
+        window.history.scrollRestoration = 'manual';
+        window.scrollTo(0, 0);
 
-            // 2. Force scroll to top on mount
+        const handleBeforeUnload = () => {
             window.scrollTo(0, 0);
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
-            // 3. Force scroll to top on refresh
-            const handleBeforeUnload = () => {
-                window.scrollTo(0, 0);
-            };
-            window.addEventListener('beforeunload', handleBeforeUnload);
-
-            return () => {
-                window.removeEventListener('beforeunload', handleBeforeUnload);
-            };
-        }
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     // Enable content after intro completes
     useEffect(() => {
         if (introComplete || hasSeenIntro) {
-            // Force scroll to top immediately when content becomes active
             window.scrollTo(0, 0);
 
-            // Double check after a short delay to fight any layout shifts
             const checkTimer = setTimeout(() => {
                 if (window.scrollY > 0) {
                     window.scrollTo(0, 0);
@@ -81,7 +64,6 @@ export default function HomeClient() {
                 setContentReady(true);
             }, 100);
 
-            // Triple check
             const finalCheck = setTimeout(() => {
                 window.scrollTo(0, 0);
             }, 300);
@@ -112,9 +94,6 @@ export default function HomeClient() {
             >
                 <Navigation showPhotographyLink={true} />
 
-                {/* Render sections but hide them visually until ready, or use condition.
-            Using condition to prevent flash.
-         */}
                 {contentReady && (
                     <>
                         <section id="hero">

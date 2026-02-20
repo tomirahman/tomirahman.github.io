@@ -1,7 +1,5 @@
-"use client";
-
 import { useEffect, useState, useCallback, useMemo } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import GlobalAudioButton from "@/components/GlobalAudioButton";
@@ -11,8 +9,7 @@ import CinematicViewer from "@/components/photography/CinematicViewer";
 import { AnimatePresence } from "framer-motion";
 import Prism from "@/components/ui/prism";
 
-// Environment variable handling for Next.js
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
 const STORAGE_URL = SUPABASE_URL
     ? `${SUPABASE_URL}/storage/v1/object/public/assets`
@@ -86,7 +83,7 @@ export default function PhotographyClient() {
                 {/* Header */}
                 <header className="fixed top-0 left-0 right-0 z-30 bg-card/90 backdrop-blur-md border-b border-border">
                     <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-                        <Link href="/">
+                        <Link to="/">
                             <Button variant="ghost" className="gap-2">
                                 <ArrowLeft className="w-4 h-4" />
                                 Back to Portfolio

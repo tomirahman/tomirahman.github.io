@@ -1,7 +1,5 @@
-"use client";
 
 import React, { useRef, useEffect } from 'react';
-import Image from 'next/image';
 import gsap from 'gsap';
 import './ChromaGrid.css';
 
@@ -120,7 +118,7 @@ export const ChromaGrid: React.FC<ChromaGridProps> = ({
                     } as React.CSSProperties}
                 >
                     <div className="chroma-img-wrapper">
-                        <Image src={c.image} alt={c.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                        <img src={c.image} alt={c.title} className="w-full h-full object-cover" loading="lazy" />
                     </div>
                     <footer className="chroma-info">
                         <h3 className="name">{c.title}</h3>

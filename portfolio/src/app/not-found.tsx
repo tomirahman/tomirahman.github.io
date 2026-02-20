@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
@@ -7,7 +7,7 @@ export default function NotFound() {
             <h1 className="text-4xl font-bold mb-4">404</h1>
             <p className="text-xl mb-8">Page Not Found</p>
             <Button asChild>
-                <Link href="/">Return Home</Link>
+                <Link to="/">Return Home</Link>
             </Button>
         </div>
     );
